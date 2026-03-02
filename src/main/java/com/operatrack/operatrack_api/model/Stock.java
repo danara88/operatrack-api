@@ -1,8 +1,7 @@
 package com.operatrack.operatrack_api.model;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Represents a stock (company) that the user wants to monitor.
@@ -10,8 +9,7 @@ import lombok.NoArgsConstructor;
  * foundation for calculating gains, losses, and the total value of a position.
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class Stock {
 
     /**
