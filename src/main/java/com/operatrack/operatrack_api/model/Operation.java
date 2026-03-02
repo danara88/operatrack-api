@@ -69,4 +69,14 @@ public class Operation {
      * May be {@code null} for operations that have not been closed (sold) yet.
      */
     private Instant saleDate;
+
+    /**
+     * The stock associated with this operation.
+     */
+    private Stock stock;
+
+    /**
+     * The tax applied to this operation.
+     */
+    private Tax tax;
 }

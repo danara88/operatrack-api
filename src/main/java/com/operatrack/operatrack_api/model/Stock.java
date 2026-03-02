@@ -1,5 +1,7 @@
 package com.operatrack.operatrack_api.model;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -31,4 +33,9 @@ public class Stock {
      * Current market price of one share of the stock.
      */
     private Double currentPrice;
+
+    /**
+     * List of operations in which this stock appears.
+     */
+    private List<Operation> operations;
 }
