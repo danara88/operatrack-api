@@ -1,0 +1,100 @@
+package com.operatrack.operatrack_api.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TaxTest {
+
+    // --- Constructor / invariants ---
+
+    @Test
+    void constructor_createsValidTax() {
+        Tax tax = new Tax("1", "Scotiabank", 0.0035);
+        assertEquals("1", tax.getId());
+        assertEquals("Scotiabank", tax.getInstitutionName());
+        assertEquals(0.0035, tax.getTaxRate());
+    }
+
+    @Test
+    void constructor_throwsWhenInstitutionNameIsTooShort() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> new Tax("1", "ABC", 0.0035));
+        assertEquals("Institution Name must be 4 characters length.", ex.getMessage());
+    }
+
+    @Test
+    void constructor_throwsWhenInstitutionNameIsNull() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> new Tax("1", null, 0.0035));
+        assertEquals("Institution Name must be 4 characters length.", ex.getMessage());
+    }
+
+    @Test
+    void constructor_throwsWhenTaxRateIsNegative() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> new Tax("1", "Scotiabank", -0.01));
+        assertEquals("Tax rate must be between 0 and 1.", ex.getMessage());
+    }
+
+    @Test
+    void constructor_throwsWhenTaxRateIsGreaterThanOne() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> new Tax("1", "Scotiabank", 1.01));
+        assertEquals("Tax rate must be between 0 and 1.", ex.getMessage());
+    }
+
+    @Test
+    void constructor_throwsWhenTaxRateIsNull() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> new Tax("1", "Scotiabank", null));
+        assertEquals("Tax rate must be between 0 and 1.", ex.getMessage());
+    }
+
+    @Test
+    void constructor_acceptsBoundaryTaxRateOfZero() {
+        Tax tax = new Tax("1", "Scotiabank", 0.0);
+        assertEquals(0.0, tax.getTaxRate());
+    }
+
+    @Test
+    void constructor_acceptsBoundaryTaxRateOfOne() {
+        Tax tax = new Tax("1", "Scotiabank", 1.0);
+        assertEquals(1.0, tax.getTaxRate());
+    }
+
+    @Test
+    void constructor_acceptsInstitutionNameWithExactlyFourCharacters() {
+        Tax tax = new Tax("1", "BBVA", 0.0025);
+        assertEquals("BBVA", tax.getInstitutionName());
+    }
+
+    // --- calculatePurchaseTax ---
+
+    @Test
+    void calculatePurchaseTax_returnsCorrectValue() {
+        Tax tax = new Tax("1", "Scotiabank", 0.0035);
+        // -[(100 * 50.0) * 0.0035] * 1.16 = -[(5000) * 0.0035] * 1.16 = -17.5 * 1.16 = -20.3
+        double result = tax.calculatePurchaseTax(100, 50.0);
+        assertEquals(-20.3, result, 1e-9);
+    }
+
+    // --- calculateSaleTax ---
+
+    @Test
+    void calculateSaleTax_returnsCorrectValue() {
+        Tax tax = new Tax("1", "Scotiabank", 0.0035);
+        // -[(100 * 55.0) * 0.0035] * 1.16 = -[(5500) * 0.0035] * 1.16 = -19.25 * 1.16 = -22.33
+        double result = tax.calculateSaleTax(100, 55.0);
+        assertEquals(-22.33, result, 1e-9);
+    }
+
+    // --- calculateTotalTax ---
+
+    @Test
+    void calculateTotalTax_returnsSumOfPurchaseAndSaleTax() {
+        Tax tax = new Tax("1", "Scotiabank", 0.0035);
+        double result = tax.calculateTotalTax(-20.3, -22.33);
+        assertEquals(-42.63, result, 1e-9);
+    }
+}
