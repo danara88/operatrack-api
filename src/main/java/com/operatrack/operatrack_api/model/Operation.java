@@ -2,16 +2,16 @@ package com.operatrack.operatrack_api.model;
 
 import java.time.Instant;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
 /**
  * Represents a stock market operation in the system.
  * An operation tracks the full lifecycle of a stock trade, including purchase details,
  * sale details, taxes applied, and the resulting financial outcomes.
  */
-@Getter
-@Setter
+@Data
+@Builder
 public class Operation {
 
     /**
