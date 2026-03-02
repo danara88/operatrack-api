@@ -1,5 +1,7 @@
 package com.operatrack.operatrack_api.model;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -25,4 +27,9 @@ public class Tax {
      * The tax rate percentage applied by the institution (e.g., 0.35 for 0.35%).
      */
     private Double taxRatePercentage;
+
+    /**
+     * List of operations to which this tax has been applied.
+     */
+    private List<Operation> operations;
 }
