@@ -1,6 +1,7 @@
 package com.operatrack.operatrack_api.model;
 
 import java.util.List;
+import lombok.Getter;
 
 /**
  * Represents a tax entity associated with a brokerage firm or financial institution.
@@ -9,26 +10,29 @@ import java.util.List;
 public class Tax {
 
     private static final double VAT_MULTIPLIER = 1.16;
-    private static final double PURCHASE_TAX_RATE = 0.0035;
 
     /**
      * The unique identifier for the tax entity.
      */
+    @Getter
     private String id;
 
     /**
      * The name of the financial institution or brokerage firm that applies this tax.
      */
+    @Getter
     private String institutionName;
 
     /**
      * The tax rate applied by the institution (e.g., 0.0035 for 0.35%). Must be between 0 and 1.
      */
+    @Getter
     private Double taxRate;
 
     /**
      * List of operations to which this tax has been applied.
      */
+    @Getter
     private List<Operation> operations;
 
     /**
@@ -51,32 +55,16 @@ public class Tax {
         this.taxRate = taxRate;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getInstitutionName() {
-        return institutionName;
-    }
-
-    public Double getTaxRate() {
-        return taxRate;
-    }
-
-    public List<Operation> getOperations() {
-        return operations;
-    }
-
     /**
      * Calculates the purchase tax for an operation.
-     * Formula: -[(shareQuantity x purchasePrice) x 0.0035] x 1.16
+     * Formula: -[(shareQuantity x purchasePrice) x taxRate] x 1.16
      *
      * @param shareQuantity the number of shares purchased
      * @param purchasePrice the price per share at the time of purchase
      * @return the purchase tax amount (negative value)
      */
     public double calculatePurchaseTax(int shareQuantity, double purchasePrice) {
-        return -((shareQuantity * purchasePrice) * PURCHASE_TAX_RATE) * VAT_MULTIPLIER;
+        return -((shareQuantity * purchasePrice) * this.taxRate) * VAT_MULTIPLIER;
     }
 
     /**
@@ -88,7 +76,7 @@ public class Tax {
      * @return the sale tax amount (negative value)
      */
     public double calculateSaleTax(int shareQuantity, double currentPrice) {
-        return -((shareQuantity * currentPrice) * taxRate) * VAT_MULTIPLIER;
+        return -((shareQuantity * currentPrice) * this.taxRate) * VAT_MULTIPLIER;
     }
 
     /**
