@@ -1,14 +1,14 @@
 package com.operatrack.operatrack_api.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
 /**
  * Represents a tax entity associated with a brokerage firm or financial institution.
  * Each institution may apply a different tax rate, which can be reused across multiple operations.
  */
-@Getter
-@Setter
+@Data
+@Builder
 public class Tax {
 
     /**
