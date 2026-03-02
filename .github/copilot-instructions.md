@@ -28,6 +28,7 @@ SaaS platform where users can record and track buy/sell operations in the stock 
 - Use Lombok for Java to reduce boilerplate code in models and services.
 - Use streams and lambda expressions for collection processing in Java.
 - Git branch name conventions: feature/[feature-name], fix/[bug-description], refactor/[refactor-description]
+- Git commit message conventions: [type]: [short description] (e.g., feat: add user authentication, fix: resolve null pointer exception)
 - Use DTOs for requests and responses in the backend to decouple the internal data models from the API contracts.
 
 ## What to Avoid
