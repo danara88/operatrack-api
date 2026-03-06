@@ -111,6 +111,44 @@ class StockTest {
         assertEquals("Current price must be zero or a positive number.", ex.getMessage());
     }
 
+    // --- Constructor with id / invariants ---
+
+    @Test
+    void constructorWithId_createsValidStockWithProvidedId() {
+        String providedId = "custom-stock-id-123";
+        Stock stock = new Stock(providedId, "Apple Inc.", "AAPL", 150.0, null);
+        assertEquals(providedId, stock.getId());
+        assertEquals("Apple Inc.", stock.getName());
+        assertEquals("AAPL", stock.getTickerSymbol());
+        assertEquals(150.0, stock.getCurrentPrice());
+        assertTrue(stock.getOperations().isEmpty());
+    }
+
+    @Test
+    void constructorWithId_acceptsUUIDAsId() {
+        String providedId = UUID.randomUUID().toString();
+        Stock stock = new Stock(providedId, "Apple Inc.", "AAPL", 150.0, null);
+        assertEquals(providedId, stock.getId());
+    }
+
+    @Test
+    void constructorWithId_throwsWhenTickerSymbolIsInvalid() {
+        assertThrows(InvalidTickerSymbolException.class,
+                () -> new Stock("custom-id", "Apple Inc.", "TOOLNG", 150.0, null));
+    }
+
+    @Test
+    void constructorWithId_throwsWhenNameIsInvalid() {
+        assertThrows(InvalidStockNameException.class,
+                () -> new Stock("custom-id", "App", "AAPL", 150.0, null));
+    }
+
+    @Test
+    void constructorWithId_throwsWhenCurrentPriceIsNegative() {
+        assertThrows(InvalidCurrentPriceException.class,
+                () -> new Stock("custom-id", "Apple Inc.", "AAPL", -1.0, null));
+    }
+
     // --- getTotalSharesQuantity ---
 
     @Test

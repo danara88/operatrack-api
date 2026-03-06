@@ -3,7 +3,6 @@ package com.operatrack.operatrack_api.model;
 import java.time.Instant;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -11,6 +10,7 @@ import lombok.Getter;
  * An operation tracks the full lifecycle of a stock trade, including purchase details,
  * sale details, taxes applied, and the resulting financial outcomes.
  */
+@Builder
 public class Operation {
 
     /**

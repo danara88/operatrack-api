@@ -74,6 +74,36 @@ class TaxTest {
         assertEquals("BBVA", tax.getInstitutionName());
     }
 
+    // --- Constructor with id / invariants ---
+
+    @Test
+    void constructorWithId_createsValidTaxWithProvidedId() {
+        String providedId = "custom-tax-id-456";
+        Tax tax = new Tax(providedId, "Scotiabank", 0.0035);
+        assertEquals(providedId, tax.getId());
+        assertEquals("Scotiabank", tax.getInstitutionName());
+        assertEquals(0.0035, tax.getTaxRate());
+    }
+
+    @Test
+    void constructorWithId_acceptsUUIDAsId() {
+        String providedId = UUID.randomUUID().toString();
+        Tax tax = new Tax(providedId, "Scotiabank", 0.0035);
+        assertEquals(providedId, tax.getId());
+    }
+
+    @Test
+    void constructorWithId_throwsWhenInstitutionNameIsInvalid() {
+        assertThrows(InvalidInstitutionNameException.class,
+                () -> new Tax("custom-id", "ABC", 0.0035));
+    }
+
+    @Test
+    void constructorWithId_throwsWhenTaxRateIsInvalid() {
+        assertThrows(InvalidTaxRateException.class,
+                () -> new Tax("custom-id", "Scotiabank", 1.5));
+    }
+
     // --- calculatePurchaseTax ---
 
     @Test
