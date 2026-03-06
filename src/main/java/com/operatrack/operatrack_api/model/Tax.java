@@ -99,13 +99,15 @@ public class Tax {
 
     /**
      * Calculates the total tax as the sum of purchase tax and sale tax.
-     * Formula: purchaseTax + saleTax
+     * Formula: calculatePurchaseTax(shareQuantity, purchasePrice) + calculateSaleTax(shareQuantity, currentPrice)
      *
-     * @param purchaseTax the purchase tax amount
-     * @param saleTax     the sale tax amount
+     * @param shareQuantity the number of shares in the operation
+     * @param purchasePrice the price per share at the time of purchase
+     * @param currentPrice  the current market price per share
      * @return the total tax amount
      */
-    public double calculateTotalTax(double purchaseTax, double saleTax) {
-        return purchaseTax + saleTax;
+    public double calculateTotalTax(int shareQuantity, double purchasePrice, double currentPrice) {
+        return calculatePurchaseTax(shareQuantity, purchasePrice)
+             + calculateSaleTax(shareQuantity, currentPrice);
     }
 }

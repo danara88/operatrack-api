@@ -129,7 +129,8 @@ class TaxTest {
     @Test
     void calculateTotalTax_returnsSumOfPurchaseAndSaleTax() {
         Tax tax = new Tax("Scotiabank", 0.0035);
-        double result = tax.calculateTotalTax(20.3, 22.33);
+        // calculatePurchaseTax(100, 50.0) = 20.3, calculateSaleTax(100, 55.0) = 22.33 => 42.63
+        double result = tax.calculateTotalTax(100, 50.0, 55.0);
         assertEquals(42.63, result, 1e-9);
     }
 }
