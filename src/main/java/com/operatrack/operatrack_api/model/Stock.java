@@ -19,31 +19,31 @@ public class Stock {
      * Unique identifier for the stock.
      */
     @Getter
-    private Long id;
+    private final Long id;
 
     /**
      * Full name of the company associated with the stock.
      */
     @Getter
-    private String name;
+    private final String name;
 
     /**
      * Ticker symbol used to identify the stock on the exchange (e.g., "AAPL", "MSFT").
      */
     @Getter
-    private String tickerSymbol;
+    private final String tickerSymbol;
 
     /**
      * Current market price of one share of the stock.
      */
     @Getter
-    private Double currentPrice;
+    private final Double currentPrice;
 
     /**
      * List of operations in which this stock appears.
      */
     @Getter
-    private List<Operation> operations;
+    private final List<Operation> operations;
 
     /**
      * Creates a new Stock entity with validation.
@@ -53,7 +53,7 @@ public class Stock {
      * @throws InvalidCurrentPriceException if currentPrice is null or negative
      */
     public Stock(Long id, String name, String tickerSymbol, Double currentPrice, List<Operation> operations) {
-        if (tickerSymbol == null || tickerSymbol.length() < 1 || tickerSymbol.length() > 5) {
+        if (tickerSymbol == null || tickerSymbol.isEmpty() || tickerSymbol.length() > 5) {
             throw new InvalidTickerSymbolException("Ticker symbol must be between 1 and 5 characters.");
         }
         if (name == null || name.length() < 4 || name.length() > 20) {

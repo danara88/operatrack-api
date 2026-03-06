@@ -17,19 +17,19 @@ public class Tax {
      * The unique identifier for the tax entity.
      */
     @Getter
-    private Long id;
+    private final Long id;
 
     /**
      * The name of the financial institution or brokerage firm that applies this tax.
      */
     @Getter
-    private String institutionName;
+    private final String institutionName;
 
     /**
      * The tax rate applied by the institution (e.g., 0.0035 for 0.35%). Must be between 0 and 1.
      */
     @Getter
-    private Double taxRate;
+    private final Double taxRate;
 
     /**
      * List of operations to which this tax has been applied.
