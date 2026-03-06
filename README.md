@@ -113,3 +113,23 @@ Net Earnings  = capitalGain + totalTax
 ```
 
 > Taxes are expressed as **negative values** because they represent a cost deducted from earnings.
+
+---
+
+## Business Invariants
+
+The following table lists all custom exceptions enforced by the domain model. Each exception is thrown when a business rule is violated during entity construction or mutation.
+
+| Exception Name | Domain Entity | Explanation |
+|---|---|---|
+| `InvalidShareQuantityException` | Operation | Share quantity must be zero or a positive number. Thrown when the number of shares is `null` or negative. |
+| `InvalidPurchasePriceException` | Operation | Purchase price must be zero or a positive number. Thrown when the price per share at purchase time is `null` or negative. |
+| `InvalidTotalValueException` | Operation | Total value must be zero or a positive number. Thrown when the total monetary value of the operation (shares × price) is `null` or negative. |
+| `InvalidPurchaseTaxException` | Operation | Purchase tax must be zero or a positive number. Thrown when the tax applied at purchase time is `null` or negative. |
+| `InvalidSaleTaxException` | Operation | Sale tax must be zero or a positive number. Thrown when the tax applied at sale time is `null` or negative. |
+| `InvalidTotalTaxException` | Operation | Total tax must be zero or a positive number. Thrown when the combined purchase and sale tax is `null` or negative. |
+| `InvalidTickerSymbolException` | Stock | Ticker symbol must be between 1 and 5 characters. Thrown when the ticker symbol is `null`, empty, or exceeds 5 characters. |
+| `InvalidStockNameException` | Stock | Stock name must be between 4 and 20 characters. Thrown when the company name is `null` or outside the 4–20 character range. |
+| `InvalidCurrentPriceException` | Stock | Current price must be zero or a positive number. Thrown when the current market price per share is `null` or negative. |
+| `InvalidInstitutionNameException` | Tax | Institution name must be at least 4 characters long. Thrown when the brokerage or institution name is `null` or fewer than 4 characters. |
+| `InvalidTaxRateException` | Tax | Tax rate must be between 0 and 1. Thrown when the tax rate is `null` or outside the valid range (e.g., `-0.5` or `1.5` are invalid). |
