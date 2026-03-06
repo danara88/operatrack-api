@@ -1,6 +1,8 @@
 package com.operatrack.operatrack_api.model;
 
 import java.util.List;
+import com.operatrack.operatrack_api.model.exceptions.InvalidInstitutionNameException;
+import com.operatrack.operatrack_api.model.exceptions.InvalidTaxRateException;
 import lombok.Getter;
 
 /**
@@ -41,14 +43,15 @@ public class Tax {
      * @param id              the unique identifier
      * @param institutionName the name of the financial institution (must be at least 4 characters)
      * @param taxRate         the decimal tax rate (must be between 0 and 1)
-     * @throws RuntimeException if any business rule is violated
+     * @throws InvalidInstitutionNameException if the institution name is null or fewer than 4 characters
+     * @throws InvalidTaxRateException if the tax rate is null or not between 0 and 1
      */
     public Tax(String id, String institutionName, Double taxRate) {
         if (institutionName == null || institutionName.length() < 4) {
-            throw new RuntimeException("Institution Name must be 4 characters length.");
+            throw new InvalidInstitutionNameException("Institution Name must be 4 characters length.");
         }
         if (taxRate == null || taxRate < 0 || taxRate > 1) {
-            throw new RuntimeException("Tax rate must be between 0 and 1.");
+            throw new InvalidTaxRateException("Tax rate must be between 0 and 1.");
         }
         this.id = id;
         this.institutionName = institutionName;
