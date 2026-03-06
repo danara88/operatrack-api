@@ -1,6 +1,5 @@
 package com.operatrack.operatrack_api.model;
 
-import java.util.List;
 import java.util.UUID;
 import com.operatrack.operatrack_api.model.exceptions.InvalidInstitutionNameException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidTaxRateException;
@@ -31,12 +30,6 @@ public class Tax {
      */
     @Getter
     private final Double taxRate;
-
-    /**
-     * List of operations to which this tax has been applied.
-     */
-    @Getter
-    private List<Operation> operations;
 
     /**
      * Creates a new Tax entity with the given institution name and tax rate.
