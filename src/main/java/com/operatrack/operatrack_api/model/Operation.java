@@ -89,12 +89,6 @@ public class Operation {
 		private final String stockId;
 
     /**
-     * The identifier of the tax applied to this operation.
-     */
-    @Getter
-		private final String taxId;
-
-    /**
      * Constructor with auto-generated UUID id and purchase date set to now.
      *
      * @param shareQuantity number of shares (≥ 0)
@@ -118,12 +112,11 @@ public class Operation {
         this.capitalGain = capitalGain;
         this.purchaseTax = tax.calculatePurchaseTax(shareQuantity, purchasePrice);
         this.saleTax = tax.calculateSaleTax(shareQuantity, currentPrice);
-        this.totalTax = tax.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
+        this.totalTax = tax.calculateTotalTax(this.purchaseTax, this.saleTax);
         this.netEarnings = netEarnings;
         this.purchaseDate = Instant.now();
         this.saleDate = saleDate;
         this.stockId = stockId;
-        this.taxId = tax.getId();
     }
 
     /**
@@ -152,12 +145,11 @@ public class Operation {
         this.capitalGain = capitalGain;
         this.purchaseTax = tax.calculatePurchaseTax(shareQuantity, purchasePrice);
         this.saleTax = tax.calculateSaleTax(shareQuantity, currentPrice);
-        this.totalTax = tax.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
+        this.totalTax = tax.calculateTotalTax(this.purchaseTax, this.saleTax);
         this.netEarnings = netEarnings;
         this.purchaseDate = purchaseDate;
         this.saleDate = saleDate;
         this.stockId = stockId;
-        this.taxId = tax.getId();
     }
 
     private void validateFields(Integer shareQuantity, Double purchasePrice, Double totalValue) {

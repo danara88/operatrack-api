@@ -26,17 +26,10 @@ class OperationTest {
         assertEquals(50.0, operation.getCapitalGain());
         assertEquals(tax.calculatePurchaseTax(10, 150.0), operation.getPurchaseTax(), 1e-9);
         assertEquals(tax.calculateSaleTax(10, 160.0), operation.getSaleTax(), 1e-9);
-        assertEquals(tax.calculateTotalTax(10, 150.0, 160.0), operation.getTotalTax(), 1e-9);
+        assertEquals(tax.calculateTotalTax(tax.calculatePurchaseTax(10, 150.0), tax.calculateSaleTax(10, 160.0)), operation.getTotalTax(), 1e-9);
         assertEquals(35.0, operation.getNetEarnings());
         assertNotNull(operation.getPurchaseDate());
         assertNull(operation.getSaleDate());
-    }
-
-    @Test
-    void constructor_setsTaxIdFromTaxInstance() {
-        Tax tax = new Tax("BBVA", 0.0035);
-        Operation operation = new Operation(10, 150.0, 160.0, 1500.0, 50.0, 35.0, null, null, tax);
-        assertEquals(tax.getId(), operation.getTaxId());
     }
 
     @Test
@@ -158,14 +151,6 @@ class OperationTest {
     }
 
     @Test
-    void constructorWithId_setsTaxIdFromTaxInstance() {
-        Tax tax = new Tax("BBVA", 0.0035);
-        Operation operation = new Operation("op-id", 10, 150.0, 160.0, 1500.0, 50.0,
-                35.0, Instant.now(), null, null, tax);
-        assertEquals(tax.getId(), operation.getTaxId());
-    }
-
-    @Test
     void constructorWithId_acceptsUUIDAsId() {
         String providedId = UUID.randomUUID().toString();
         Tax tax = new Tax("BBVA", 0.0035);
@@ -190,7 +175,7 @@ class OperationTest {
                 35.0, Instant.now(), null, null, tax);
         assertEquals(tax.calculatePurchaseTax(10, 150.0), operation.getPurchaseTax(), 1e-9);
         assertEquals(tax.calculateSaleTax(10, 160.0), operation.getSaleTax(), 1e-9);
-        assertEquals(tax.calculateTotalTax(10, 150.0, 160.0), operation.getTotalTax(), 1e-9);
+        assertEquals(tax.calculateTotalTax(tax.calculatePurchaseTax(10, 150.0), tax.calculateSaleTax(10, 160.0)), operation.getTotalTax(), 1e-9);
     }
 
     @Test
