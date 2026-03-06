@@ -1,5 +1,7 @@
 package com.operatrack.operatrack_api.model;
 
+import com.operatrack.operatrack_api.model.exceptions.InvalidInstitutionNameException;
+import com.operatrack.operatrack_api.model.exceptions.InvalidTaxRateException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,35 +20,35 @@ class TaxTest {
 
     @Test
     void constructor_throwsWhenInstitutionNameIsTooShort() {
-        RuntimeException ex = assertThrows(RuntimeException.class,
+        InvalidInstitutionNameException ex = assertThrows(InvalidInstitutionNameException.class,
                 () -> new Tax("1", "ABC", 0.0035));
         assertEquals("Institution Name must be 4 characters length.", ex.getMessage());
     }
 
     @Test
     void constructor_throwsWhenInstitutionNameIsNull() {
-        RuntimeException ex = assertThrows(RuntimeException.class,
+        InvalidInstitutionNameException ex = assertThrows(InvalidInstitutionNameException.class,
                 () -> new Tax("1", null, 0.0035));
         assertEquals("Institution Name must be 4 characters length.", ex.getMessage());
     }
 
     @Test
     void constructor_throwsWhenTaxRateIsNegative() {
-        RuntimeException ex = assertThrows(RuntimeException.class,
+        InvalidTaxRateException ex = assertThrows(InvalidTaxRateException.class,
                 () -> new Tax("1", "Scotiabank", -0.01));
         assertEquals("Tax rate must be between 0 and 1.", ex.getMessage());
     }
 
     @Test
     void constructor_throwsWhenTaxRateIsGreaterThanOne() {
-        RuntimeException ex = assertThrows(RuntimeException.class,
+        InvalidTaxRateException ex = assertThrows(InvalidTaxRateException.class,
                 () -> new Tax("1", "Scotiabank", 1.01));
         assertEquals("Tax rate must be between 0 and 1.", ex.getMessage());
     }
 
     @Test
     void constructor_throwsWhenTaxRateIsNull() {
-        RuntimeException ex = assertThrows(RuntimeException.class,
+        InvalidTaxRateException ex = assertThrows(InvalidTaxRateException.class,
                 () -> new Tax("1", "Scotiabank", null));
         assertEquals("Tax rate must be between 0 and 1.", ex.getMessage());
     }
