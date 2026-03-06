@@ -4,10 +4,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 import com.operatrack.operatrack_api.model.exceptions.InvalidPurchasePriceException;
-import com.operatrack.operatrack_api.model.exceptions.InvalidPurchaseTaxException;
-import com.operatrack.operatrack_api.model.exceptions.InvalidSaleTaxException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidShareQuantityException;
-import com.operatrack.operatrack_api.model.exceptions.InvalidTotalTaxException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidTotalValueException;
 import lombok.Getter;
 
@@ -102,34 +99,31 @@ public class Operation {
      *
      * @param shareQuantity number of shares (≥ 0)
      * @param purchasePrice price per share at purchase (≥ 0)
+     * @param currentPrice  current market price per share
      * @param totalValue    total monetary value of the operation (≥ 0)
      * @param capitalGain   capital gain from the operation
-     * @param purchaseTax   tax applied at purchase (≥ 0)
-     * @param saleTax       tax applied at sale (≥ 0)
-     * @param totalTax      combined purchase and sale tax (≥ 0)
      * @param netEarnings   net earnings after taxes
      * @param saleDate      date of sale, may be {@code null} if not yet sold
      * @param stockId       identifier of the associated stock
-     * @param taxId         identifier of the associated tax entity
+     * @param tax           the tax entity used to calculate purchase tax, sale tax, and total tax
      */
-    public Operation(Integer shareQuantity, Double purchasePrice, Double totalValue,
-                     Double capitalGain, Double purchaseTax, Double saleTax,
-                     Double totalTax, Double netEarnings, Instant saleDate,
-                     String stockId, String taxId) {
-        validateFields(shareQuantity, purchasePrice, totalValue, purchaseTax, saleTax, totalTax);
+    public Operation(Integer shareQuantity, Double purchasePrice, Double currentPrice, Double totalValue,
+                     Double capitalGain, Double netEarnings, Instant saleDate,
+                     String stockId, Tax tax) {
+        validateFields(shareQuantity, purchasePrice, totalValue);
         this.id = UUID.randomUUID().toString();
         this.shareQuantity = shareQuantity;
         this.purchasePrice = purchasePrice;
         this.totalValue = totalValue;
         this.capitalGain = capitalGain;
-        this.purchaseTax = purchaseTax;
-        this.saleTax = saleTax;
-        this.totalTax = totalTax;
+        this.purchaseTax = tax.calculatePurchaseTax(shareQuantity, purchasePrice);
+        this.saleTax = tax.calculateSaleTax(shareQuantity, currentPrice);
+        this.totalTax = tax.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
         this.netEarnings = netEarnings;
         this.purchaseDate = Instant.now();
         this.saleDate = saleDate;
         this.stockId = stockId;
-        this.taxId = taxId;
+        this.taxId = tax.getId();
     }
 
     /**
@@ -138,39 +132,35 @@ public class Operation {
      * @param id            operation identifier
      * @param shareQuantity number of shares (≥ 0)
      * @param purchasePrice price per share at purchase (≥ 0)
+     * @param currentPrice  current market price per share
      * @param totalValue    total monetary value of the operation (≥ 0)
      * @param capitalGain   capital gain from the operation
-     * @param purchaseTax   tax applied at purchase (≥ 0)
-     * @param saleTax       tax applied at sale (≥ 0)
-     * @param totalTax      combined purchase and sale tax (≥ 0)
      * @param netEarnings   net earnings after taxes
      * @param purchaseDate  date of purchase
      * @param saleDate      date of sale, may be {@code null} if not yet sold
      * @param stockId       identifier of the associated stock
-     * @param taxId         identifier of the associated tax entity
+     * @param tax           the tax entity used to calculate purchase tax, sale tax, and total tax
      */
-    public Operation(String id, Integer shareQuantity, Double purchasePrice, Double totalValue,
-                     Double capitalGain, Double purchaseTax, Double saleTax,
-                     Double totalTax, Double netEarnings, Instant purchaseDate,
-                     Instant saleDate, String stockId, String taxId) {
-        validateFields(shareQuantity, purchasePrice, totalValue, purchaseTax, saleTax, totalTax);
+    public Operation(String id, Integer shareQuantity, Double purchasePrice, Double currentPrice, Double totalValue,
+                     Double capitalGain, Double netEarnings, Instant purchaseDate,
+                     Instant saleDate, String stockId, Tax tax) {
+        validateFields(shareQuantity, purchasePrice, totalValue);
         this.id = id;
         this.shareQuantity = shareQuantity;
         this.purchasePrice = purchasePrice;
         this.totalValue = totalValue;
         this.capitalGain = capitalGain;
-        this.purchaseTax = purchaseTax;
-        this.saleTax = saleTax;
-        this.totalTax = totalTax;
+        this.purchaseTax = tax.calculatePurchaseTax(shareQuantity, purchasePrice);
+        this.saleTax = tax.calculateSaleTax(shareQuantity, currentPrice);
+        this.totalTax = tax.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
         this.netEarnings = netEarnings;
         this.purchaseDate = purchaseDate;
         this.saleDate = saleDate;
         this.stockId = stockId;
-        this.taxId = taxId;
+        this.taxId = tax.getId();
     }
 
-    private void validateFields(Integer shareQuantity, Double purchasePrice, Double totalValue,
-                                Double purchaseTax, Double saleTax, Double totalTax) {
+    private void validateFields(Integer shareQuantity, Double purchasePrice, Double totalValue) {
         if (shareQuantity == null || shareQuantity < 0) {
             throw new InvalidShareQuantityException("Share quantity must be zero or a positive number.");
         }
@@ -179,15 +169,6 @@ public class Operation {
         }
         if (totalValue == null || totalValue < 0) {
             throw new InvalidTotalValueException("Total value must be zero or a positive number.");
-        }
-        if (purchaseTax == null || purchaseTax < 0) {
-            throw new InvalidPurchaseTaxException("Purchase tax must be zero or a positive number.");
-        }
-        if (saleTax == null || saleTax < 0) {
-            throw new InvalidSaleTaxException("Sale tax must be zero or a positive number.");
-        }
-        if (totalTax == null || totalTax < 0) {
-            throw new InvalidTotalTaxException("Total tax must be zero or a positive number.");
         }
     }
 }
