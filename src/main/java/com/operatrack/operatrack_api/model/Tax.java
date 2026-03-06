@@ -48,15 +48,36 @@ public class Tax {
      * @throws InvalidTaxRateException if the tax rate is null or not between 0 and 1
      */
     public Tax(String institutionName, Double taxRate) {
+        validateFields(institutionName, taxRate);
+        this.id = UUID.randomUUID().toString();
+        this.institutionName = institutionName;
+        this.taxRate = taxRate;
+    }
+
+    /**
+     * Creates a new Tax entity with a provided identifier, institution name, and tax rate.
+     * Use this constructor when the unique identifier is known in advance (e.g., when restoring from persistence).
+     *
+     * @param id              the unique identifier to assign to this tax entity
+     * @param institutionName the name of the financial institution (must be at least 4 characters)
+     * @param taxRate         the decimal tax rate (must be between 0 and 1)
+     * @throws InvalidInstitutionNameException if the institution name is null or fewer than 4 characters
+     * @throws InvalidTaxRateException if the tax rate is null or not between 0 and 1
+     */
+    public Tax(String id, String institutionName, Double taxRate) {
+        validateFields(institutionName, taxRate);
+        this.id = id;
+        this.institutionName = institutionName;
+        this.taxRate = taxRate;
+    }
+
+    private void validateFields(String institutionName, Double taxRate) {
         if (institutionName == null || institutionName.length() < 4) {
             throw new InvalidInstitutionNameException("Institution Name must be 4 characters length.");
         }
         if (taxRate == null || taxRate < 0 || taxRate > 1) {
             throw new InvalidTaxRateException("Tax rate must be between 0 and 1.");
         }
-        this.id = UUID.randomUUID().toString();
-        this.institutionName = institutionName;
-        this.taxRate = taxRate;
     }
 
     /**
