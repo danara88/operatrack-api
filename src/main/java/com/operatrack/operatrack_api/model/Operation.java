@@ -21,68 +21,81 @@ public class Operation {
     /**
      * The unique identifier of the operation.
      */
-    @Getter private final String id;
+    @Getter
+		private final String id;
 
     /**
      * The number of shares involved in the operation.
      */
-    @Getter private final Integer shareQuantity;
+    @Getter
+		private final Integer shareQuantity;
 
     /**
      * The price per share at the time of purchase.
      */
-    @Getter private final Double purchasePrice;
+    @Getter
+		private final Double purchasePrice;
 
     /**
      * The total monetary value of the operation (shares × price).
      */
-    @Getter private final Double totalValue;
+    @Getter
+		private final Double totalValue;
 
     /**
      * The capital gain obtained from the operation (sale proceeds minus purchase cost).
      */
-    @Getter private final Double capitalGain;
+    @Getter
+		private final Double capitalGain;
 
     /**
      * The tax amount applied at the time of purchase.
      */
-    @Getter private final Double purchaseTax;
+    @Getter
+		private final Double purchaseTax;
 
     /**
      * The tax amount applied at the time of sale.
      */
-    @Getter private final Double saleTax;
+    @Getter
+		private final Double saleTax;
 
     /**
      * The combined total of purchase tax and sale tax.
      */
-    @Getter private final Double totalTax;
+    @Getter
+		private final Double totalTax;
 
     /**
      * The net earnings after deducting all taxes from the capital gain.
      */
-    @Getter private final Double netEarnings;
+    @Getter
+		private final Double netEarnings;
 
     /**
      * The date and time when the shares were purchased.
      */
-    @Getter private final Instant purchaseDate;
+    @Getter
+		private final Instant purchaseDate;
 
     /**
      * The date and time when the shares were sold.
      * May be {@code null} for operations that have not been closed (sold) yet.
      */
-    @Getter private final Instant saleDate;
+    @Getter
+		private final Instant saleDate;
 
     /**
      * The stock associated with this operation.
      */
-    @Getter private final Stock stock;
+    @Getter
+		private final Stock stock;
 
     /**
      * The tax applied to this operation.
      */
-    @Getter private final Tax tax;
+    @Getter
+		private final Tax tax;
 
     /**
      * Constructor with auto-generated UUID id and purchase date set to now.
