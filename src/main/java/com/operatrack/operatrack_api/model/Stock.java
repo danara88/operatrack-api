@@ -2,6 +2,7 @@ package com.operatrack.operatrack_api.model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import com.operatrack.operatrack_api.model.exceptions.InvalidCurrentPriceException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidStockNameException;
@@ -19,7 +20,7 @@ public class Stock {
      * Unique identifier for the stock.
      */
     @Getter
-    private final Long id;
+    private final String id;
 
     /**
      * Full name of the company associated with the stock.
@@ -47,12 +48,13 @@ public class Stock {
 
     /**
      * Creates a new Stock entity with validation.
+     * The unique identifier is automatically generated as a random UUID string.
      *
      * @throws InvalidTickerSymbolException if tickerSymbol is null or not between 1 and 5 characters
      * @throws InvalidStockNameException    if name is null or not between 4 and 20 characters
      * @throws InvalidCurrentPriceException if currentPrice is null or negative
      */
-    public Stock(Long id, String name, String tickerSymbol, Double currentPrice, List<Operation> operations) {
+    public Stock(String name, String tickerSymbol, Double currentPrice, List<Operation> operations) {
         if (tickerSymbol == null || tickerSymbol.isEmpty() || tickerSymbol.length() > 5) {
             throw new InvalidTickerSymbolException("Ticker symbol must be between 1 and 5 characters.");
         }
@@ -62,7 +64,7 @@ public class Stock {
         if (currentPrice == null || currentPrice < 0) {
             throw new InvalidCurrentPriceException("Current price must be zero or a positive number.");
         }
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.tickerSymbol = tickerSymbol;
         this.currentPrice = currentPrice;

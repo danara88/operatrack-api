@@ -17,7 +17,7 @@ public class Operation {
     /**
      * The unique identifier of the operation.
      */
-    private Long id;
+    private String id;
 
     /**
      * The number of shares involved in the operation.

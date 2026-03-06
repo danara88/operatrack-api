@@ -1,6 +1,7 @@
 package com.operatrack.operatrack_api.model;
 
 import java.util.List;
+import java.util.UUID;
 import com.operatrack.operatrack_api.model.exceptions.InvalidInstitutionNameException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidTaxRateException;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class Tax {
      * The unique identifier for the tax entity.
      */
     @Getter
-    private final Long id;
+    private final String id;
 
     /**
      * The name of the financial institution or brokerage firm that applies this tax.
@@ -38,22 +39,22 @@ public class Tax {
     private List<Operation> operations;
 
     /**
-     * Creates a new Tax entity with the given identifier, institution name, and tax rate.
+     * Creates a new Tax entity with the given institution name and tax rate.
+     * The unique identifier is automatically generated as a random UUID string.
      *
-     * @param id              the unique identifier
      * @param institutionName the name of the financial institution (must be at least 4 characters)
      * @param taxRate         the decimal tax rate (must be between 0 and 1)
      * @throws InvalidInstitutionNameException if the institution name is null or fewer than 4 characters
      * @throws InvalidTaxRateException if the tax rate is null or not between 0 and 1
      */
-    public Tax(Long id, String institutionName, Double taxRate) {
+    public Tax(String institutionName, Double taxRate) {
         if (institutionName == null || institutionName.length() < 4) {
             throw new InvalidInstitutionNameException("Institution Name must be 4 characters length.");
         }
         if (taxRate == null || taxRate < 0 || taxRate > 1) {
             throw new InvalidTaxRateException("Tax rate must be between 0 and 1.");
         }
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.institutionName = institutionName;
         this.taxRate = taxRate;
     }
