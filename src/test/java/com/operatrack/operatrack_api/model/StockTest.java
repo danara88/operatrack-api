@@ -159,8 +159,8 @@ class StockTest {
 
     @Test
     void getTotalSharesQuantity_returnsSumOfAllOperationShares() {
-        Operation op1 = Operation.builder().shareQuantity(10).totalValue(1500.0).capitalGain(50.0).build();
-        Operation op2 = Operation.builder().shareQuantity(5).totalValue(750.0).capitalGain(25.0).build();
+        Operation op1 = new Operation(10, 150.0, 1500.0, 50.0, 0.0, 0.0, 0.0, null, null, null, null);
+        Operation op2 = new Operation(5, 150.0, 750.0, 25.0, 0.0, 0.0, 0.0, null, null, null, null);
         Stock stock = new Stock("Apple Inc.", "AAPL", 150.0, List.of(op1, op2));
         assertEquals(15, stock.getTotalSharesQuantity());
     }
@@ -175,8 +175,8 @@ class StockTest {
 
     @Test
     void getTotalCapitalInvestment_returnsSumOfAllOperationTotalValues() {
-        Operation op1 = Operation.builder().shareQuantity(10).totalValue(1500.0).capitalGain(50.0).build();
-        Operation op2 = Operation.builder().shareQuantity(5).totalValue(750.0).capitalGain(25.0).build();
+        Operation op1 = new Operation(10, 150.0, 1500.0, 50.0, 0.0, 0.0, 0.0, null, null, null, null);
+        Operation op2 = new Operation(5, 150.0, 750.0, 25.0, 0.0, 0.0, 0.0, null, null, null, null);
         Stock stock = new Stock("Apple Inc.", "AAPL", 150.0, List.of(op1, op2));
         assertEquals(2250.0, stock.getTotalCapitalInvestment(), 1e-9);
     }
@@ -191,16 +191,16 @@ class StockTest {
 
     @Test
     void getTotalCapitalGains_returnsSumOfAllOperationCapitalGains() {
-        Operation op1 = Operation.builder().shareQuantity(10).totalValue(1500.0).capitalGain(50.0).build();
-        Operation op2 = Operation.builder().shareQuantity(5).totalValue(750.0).capitalGain(25.0).build();
+        Operation op1 = new Operation(10, 150.0, 1500.0, 50.0, 0.0, 0.0, 0.0, null, null, null, null);
+        Operation op2 = new Operation(5, 150.0, 750.0, 25.0, 0.0, 0.0, 0.0, null, null, null, null);
         Stock stock = new Stock("Apple Inc.", "AAPL", 150.0, List.of(op1, op2));
         assertEquals(75.0, stock.getTotalCapitalGains(), 1e-9);
     }
 
     @Test
     void getTotalCapitalGains_handlesNegativeGains() {
-        Operation op1 = Operation.builder().shareQuantity(10).totalValue(1500.0).capitalGain(-30.0).build();
-        Operation op2 = Operation.builder().shareQuantity(5).totalValue(750.0).capitalGain(10.0).build();
+        Operation op1 = new Operation(10, 150.0, 1500.0, -30.0, 0.0, 0.0, 0.0, null, null, null, null);
+        Operation op2 = new Operation(5, 150.0, 750.0, 10.0, 0.0, 0.0, 0.0, null, null, null, null);
         Stock stock = new Stock("Apple Inc.", "AAPL", 150.0, List.of(op1, op2));
         assertEquals(-20.0, stock.getTotalCapitalGains(), 1e-9);
     }
