@@ -82,26 +82,26 @@ public class Tax {
 
     /**
      * Calculates the purchase tax for an operation.
-     * Formula: -[(shareQuantity x purchasePrice) x taxRate] x 1.16
+     * Formula: [(shareQuantity x purchasePrice) x taxRate] x 1.16
      *
      * @param shareQuantity the number of shares purchased
      * @param purchasePrice the price per share at the time of purchase
-     * @return the purchase tax amount (negative value)
+     * @return the purchase tax amount (positive value)
      */
     public double calculatePurchaseTax(int shareQuantity, double purchasePrice) {
-        return -((shareQuantity * purchasePrice) * this.taxRate) * VAT_MULTIPLIER;
+        return ((shareQuantity * purchasePrice) * this.taxRate) * VAT_MULTIPLIER;
     }
 
     /**
      * Calculates the sale tax for an operation.
-     * Formula: -[(shareQuantity x currentPrice) x taxRate] x 1.16
+     * Formula: [(shareQuantity x currentPrice) x taxRate] x 1.16
      *
      * @param shareQuantity the number of shares sold
      * @param currentPrice  the current market price per share
-     * @return the sale tax amount (negative value)
+     * @return the sale tax amount (positive value)
      */
     public double calculateSaleTax(int shareQuantity, double currentPrice) {
-        return -((shareQuantity * currentPrice) * this.taxRate) * VAT_MULTIPLIER;
+        return ((shareQuantity * currentPrice) * this.taxRate) * VAT_MULTIPLIER;
     }
 
     /**

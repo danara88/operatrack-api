@@ -109,9 +109,9 @@ class TaxTest {
     @Test
     void calculatePurchaseTax_returnsCorrectValue() {
         Tax tax = new Tax("Scotiabank", 0.0035);
-        // -[(100 * 50.0) * 0.0035] * 1.16 = -[(5000) * 0.0035] * 1.16 = -17.5 * 1.16 = -20.3
+        // [(100 * 50.0) * 0.0035] * 1.16 = [(5000) * 0.0035] * 1.16 = 17.5 * 1.16 = 20.3
         double result = tax.calculatePurchaseTax(100, 50.0);
-        assertEquals(-20.3, result, 1e-9);
+        assertEquals(20.3, result, 1e-9);
     }
 
     // --- calculateSaleTax ---
@@ -119,9 +119,9 @@ class TaxTest {
     @Test
     void calculateSaleTax_returnsCorrectValue() {
         Tax tax = new Tax("Scotiabank", 0.0035);
-        // -[(100 * 55.0) * 0.0035] * 1.16 = -[(5500) * 0.0035] * 1.16 = -19.25 * 1.16 = -22.33
+        // [(100 * 55.0) * 0.0035] * 1.16 = [(5500) * 0.0035] * 1.16 = 19.25 * 1.16 = 22.33
         double result = tax.calculateSaleTax(100, 55.0);
-        assertEquals(-22.33, result, 1e-9);
+        assertEquals(22.33, result, 1e-9);
     }
 
     // --- calculateTotalTax ---
@@ -129,7 +129,7 @@ class TaxTest {
     @Test
     void calculateTotalTax_returnsSumOfPurchaseAndSaleTax() {
         Tax tax = new Tax("Scotiabank", 0.0035);
-        double result = tax.calculateTotalTax(-20.3, -22.33);
-        assertEquals(-42.63, result, 1e-9);
+        double result = tax.calculateTotalTax(20.3, 22.33);
+        assertEquals(42.63, result, 1e-9);
     }
 }

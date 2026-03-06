@@ -106,13 +106,11 @@ A `Tax` entity models the commission or fee structure of a specific brokerage fi
 Taxes include a **16% VAT** applied on top of the broker commission.
 
 ```
-Purchase Tax  = -[(shareQuantity × purchasePrice) × taxRate] × 1.16
-Sale Tax      = -[(shareQuantity × currentPrice)  × taxRate] × 1.16
+Purchase Tax  = [(shareQuantity × purchasePrice) × taxRate] × 1.16
+Sale Tax      = [(shareQuantity × currentPrice)  × taxRate] × 1.16
 Total Tax     = purchaseTax + saleTax
-Net Earnings  = capitalGain + totalTax
+Net Earnings  = capitalGain - totalTax
 ```
-
-> Taxes are expressed as **negative values** because they represent a cost deducted from earnings.
 
 ---
 
