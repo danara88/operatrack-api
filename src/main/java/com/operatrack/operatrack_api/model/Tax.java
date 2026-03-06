@@ -17,7 +17,7 @@ public class Tax {
      * The unique identifier for the tax entity.
      */
     @Getter
-    private String id;
+    private Long id;
 
     /**
      * The name of the financial institution or brokerage firm that applies this tax.
@@ -46,7 +46,7 @@ public class Tax {
      * @throws InvalidInstitutionNameException if the institution name is null or fewer than 4 characters
      * @throws InvalidTaxRateException if the tax rate is null or not between 0 and 1
      */
-    public Tax(String id, String institutionName, Double taxRate) {
+    public Tax(Long id, String institutionName, Double taxRate) {
         if (institutionName == null || institutionName.length() < 4) {
             throw new InvalidInstitutionNameException("Institution Name must be 4 characters length.");
         }

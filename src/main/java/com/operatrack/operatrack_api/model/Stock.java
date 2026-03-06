@@ -17,7 +17,7 @@ public class Stock {
     /**
      * Unique identifier for the stock.
      */
-    private String id;
+    private Long id;
 
     /**
      * Full name of the company associated with the stock.
