@@ -71,8 +71,8 @@ The heart of the system. An `Operation` represents a complete stock trade—from
 | `netEarnings` | `Double` | Capital gain minus total taxes |
 | `purchaseDate` | `Instant` | Timestamp of the purchase |
 | `saleDate` | `Instant` | Timestamp of the sale (`null` if still open) |
-| `stock` | `Stock` | The stock traded in this operation |
-| `tax` | `Tax` | The tax entity applied to this operation |
+| `stockId` | `String` | The identifier of the stock traded in this operation |
+| `taxId` | `String` | The identifier of the tax entity applied to this operation |
 
 ---
 
@@ -86,7 +86,6 @@ A `Stock` represents a company that the user wants to monitor. It stores the tic
 | `name` | `String` | Full company name |
 | `tickerSymbol` | `String` | Exchange ticker symbol (e.g., `AAPL`, `MSFT`) |
 | `currentPrice` | `Double` | Current market price per share |
-| `operations` | `List<Operation>` | All operations associated with this stock |
 
 ---
 
@@ -99,7 +98,6 @@ A `Tax` entity models the commission or fee structure of a specific brokerage fi
 | `id` | `String` | Unique identifier (auto-generated UUID) |
 | `institutionName` | `String` | Name of the brokerage or financial institution (min. 4 characters) |
 | `taxRate` | `Double` | Decimal tax rate, e.g. `0.0035` for 0.35% (must be between 0 and 1) |
-| `operations` | `List<Operation>` | All operations that use this tax |
 
 #### Tax Calculation Formulas
 

@@ -86,16 +86,16 @@ public class Operation {
 		private final Instant saleDate;
 
     /**
-     * The stock associated with this operation.
+     * The identifier of the stock associated with this operation.
      */
     @Getter
-		private final Stock stock;
+		private final String stockId;
 
     /**
-     * The tax applied to this operation.
+     * The identifier of the tax applied to this operation.
      */
     @Getter
-		private final Tax tax;
+		private final String taxId;
 
     /**
      * Constructor with auto-generated UUID id and purchase date set to now.
@@ -109,13 +109,13 @@ public class Operation {
      * @param totalTax      combined purchase and sale tax (≥ 0)
      * @param netEarnings   net earnings after taxes
      * @param saleDate      date of sale, may be {@code null} if not yet sold
-     * @param stock         associated stock
-     * @param tax           associated tax entity
+     * @param stockId       identifier of the associated stock
+     * @param taxId         identifier of the associated tax entity
      */
     public Operation(Integer shareQuantity, Double purchasePrice, Double totalValue,
                      Double capitalGain, Double purchaseTax, Double saleTax,
                      Double totalTax, Double netEarnings, Instant saleDate,
-                     Stock stock, Tax tax) {
+                     String stockId, String taxId) {
         validateFields(shareQuantity, purchasePrice, totalValue, purchaseTax, saleTax, totalTax);
         this.id = UUID.randomUUID().toString();
         this.shareQuantity = shareQuantity;
@@ -128,8 +128,8 @@ public class Operation {
         this.netEarnings = netEarnings;
         this.purchaseDate = Instant.now();
         this.saleDate = saleDate;
-        this.stock = stock;
-        this.tax = tax;
+        this.stockId = stockId;
+        this.taxId = taxId;
     }
 
     /**
@@ -146,13 +146,13 @@ public class Operation {
      * @param netEarnings   net earnings after taxes
      * @param purchaseDate  date of purchase
      * @param saleDate      date of sale, may be {@code null} if not yet sold
-     * @param stock         associated stock
-     * @param tax           associated tax entity
+     * @param stockId       identifier of the associated stock
+     * @param taxId         identifier of the associated tax entity
      */
     public Operation(String id, Integer shareQuantity, Double purchasePrice, Double totalValue,
                      Double capitalGain, Double purchaseTax, Double saleTax,
                      Double totalTax, Double netEarnings, Instant purchaseDate,
-                     Instant saleDate, Stock stock, Tax tax) {
+                     Instant saleDate, String stockId, String taxId) {
         validateFields(shareQuantity, purchasePrice, totalValue, purchaseTax, saleTax, totalTax);
         this.id = id;
         this.shareQuantity = shareQuantity;
@@ -165,8 +165,8 @@ public class Operation {
         this.netEarnings = netEarnings;
         this.purchaseDate = purchaseDate;
         this.saleDate = saleDate;
-        this.stock = stock;
-        this.tax = tax;
+        this.stockId = stockId;
+        this.taxId = taxId;
     }
 
     private void validateFields(Integer shareQuantity, Double purchasePrice, Double totalValue,
