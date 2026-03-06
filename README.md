@@ -60,7 +60,7 @@ The heart of the system. An `Operation` represents a complete stock trade—from
 
 | Field | Type | Description |
 |---|---|---|
-| `id` | `Long` | Unique identifier |
+| `id` | `String` | Unique identifier (auto-generated UUID) |
 | `shareQuantity` | `Integer` | Number of shares involved |
 | `purchasePrice` | `Double` | Price per share at the time of purchase |
 | `totalValue` | `Double` | Total monetary value (shares × price) |
@@ -82,7 +82,7 @@ A `Stock` represents a company that the user wants to monitor. It stores the tic
 
 | Field | Type | Description |
 |---|---|---|
-| `id` | `Long` | Unique identifier |
+| `id` | `String` | Unique identifier (auto-generated UUID) |
 | `name` | `String` | Full company name |
 | `tickerSymbol` | `String` | Exchange ticker symbol (e.g., `AAPL`, `MSFT`) |
 | `currentPrice` | `Double` | Current market price per share |
@@ -96,7 +96,7 @@ A `Tax` entity models the commission or fee structure of a specific brokerage fi
 
 | Field | Type | Description |
 |---|---|---|
-| `id` | `Long` | Unique identifier |
+| `id` | `String` | Unique identifier (auto-generated UUID) |
 | `institutionName` | `String` | Name of the brokerage or financial institution (min. 4 characters) |
 | `taxRate` | `Double` | Decimal tax rate, e.g. `0.0035` for 0.35% (must be between 0 and 1) |
 | `operations` | `List<Operation>` | All operations that use this tax |
