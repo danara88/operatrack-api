@@ -112,7 +112,7 @@ public class Operation {
         this.capitalGain = capitalGain;
         this.purchaseTax = tax.calculatePurchaseTax(shareQuantity, purchasePrice);
         this.saleTax = tax.calculateSaleTax(shareQuantity, currentPrice);
-        this.totalTax = tax.calculateTotalTax(this.purchaseTax, this.saleTax);
+        this.totalTax = tax.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
         this.netEarnings = netEarnings;
         this.purchaseDate = Instant.now();
         this.saleDate = saleDate;
@@ -145,7 +145,7 @@ public class Operation {
         this.capitalGain = capitalGain;
         this.purchaseTax = tax.calculatePurchaseTax(shareQuantity, purchasePrice);
         this.saleTax = tax.calculateSaleTax(shareQuantity, currentPrice);
-        this.totalTax = tax.calculateTotalTax(this.purchaseTax, this.saleTax);
+        this.totalTax = tax.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
         this.netEarnings = netEarnings;
         this.purchaseDate = purchaseDate;
         this.saleDate = saleDate;
