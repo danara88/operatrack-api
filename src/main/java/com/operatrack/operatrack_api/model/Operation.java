@@ -3,8 +3,11 @@ package com.operatrack.operatrack_api.model;
 import java.time.Instant;
 
 import com.operatrack.operatrack_api.model.exceptions.InvalidPurchasePriceException;
+import com.operatrack.operatrack_api.model.exceptions.InvalidSaleDateException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidShareQuantityException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidTotalValueException;
+import com.operatrack.operatrack_api.model.exceptions.OperationAlreadyClosedException;
+import com.operatrack.operatrack_api.model.exceptions.OperationStillOpenException;
 import lombok.Getter;
 
 /**
@@ -79,7 +82,7 @@ public class Operation {
      * May be {@code null} for operations that have not been closed (sold) yet.
      */
     @Getter
-		private final Instant saleDate;
+		private Instant saleDate;
 
     /**
      * The identifier of the stock associated with this operation.
@@ -178,6 +181,31 @@ public class Operation {
         this.purchaseDate = purchaseDate;
         this.saleDate = saleDate;
         this.stockId = stockId;
+    }
+
+    public boolean isOpen() {
+        return this.saleDate == null;
+    }
+
+    public boolean isClosed() {
+        return this.saleDate != null;
+    }
+
+    public void close(Instant saleDate) {
+        if (isClosed()) {
+            throw new OperationAlreadyClosedException("Operation is already closed.");
+        }
+        if (saleDate == null) {
+            throw new InvalidSaleDateException("Sale date cannot be null.");
+        }
+        this.saleDate = saleDate;
+    }
+
+    public boolean isProfitable() {
+        if (isOpen()) {
+            throw new OperationStillOpenException("Cannot determine profitability of an open operation.");
+        }
+        return this.netEarnings > 0;
     }
 
     private void validateFields(Integer shareQuantity, Double purchasePrice) {

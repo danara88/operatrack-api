@@ -1,7 +1,10 @@
 package com.operatrack.operatrack_api.model;
 
 import com.operatrack.operatrack_api.model.exceptions.InvalidPurchasePriceException;
+import com.operatrack.operatrack_api.model.exceptions.InvalidSaleDateException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidShareQuantityException;
+import com.operatrack.operatrack_api.model.exceptions.OperationAlreadyClosedException;
+import com.operatrack.operatrack_api.model.exceptions.OperationStillOpenException;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -214,6 +217,86 @@ class OperationTest {
         assertThrows(InvalidPurchasePriceException.class,
                 () -> new Operation("op-id", 10, -1.0, 160.0,
                         Instant.now(), null, null, brokerageFirm));
+    }
+
+    // --- isOpen / isClosed ---
+
+    @Test
+    void isOpen_returnsTrueWhenSaleDateIsNull() {
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
+        Operation operation = new Operation(10, 150.0, 160.0, null, null, brokerageFirm);
+        assertTrue(operation.isOpen());
+        assertFalse(operation.isClosed());
+    }
+
+    @Test
+    void isClosed_returnsTrueWhenSaleDateIsPresent() {
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
+        Operation operation = new Operation(10, 150.0, 160.0, Instant.now(), null, brokerageFirm);
+        assertTrue(operation.isClosed());
+        assertFalse(operation.isOpen());
+    }
+
+    // --- close ---
+
+    @Test
+    void close_setsSaleDateAndClosesOperation() {
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
+        Operation operation = new Operation(10, 150.0, 160.0, null, null, brokerageFirm);
+        Instant saleDate = Instant.parse("2024-06-01T12:00:00Z");
+        operation.close(saleDate);
+        assertTrue(operation.isClosed());
+        assertEquals(saleDate, operation.getSaleDate());
+    }
+
+    @Test
+    void close_throwsWhenOperationIsAlreadyClosed() {
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
+        Operation operation = new Operation(10, 150.0, 160.0, Instant.now(), null, brokerageFirm);
+        OperationAlreadyClosedException ex = assertThrows(OperationAlreadyClosedException.class,
+                () -> operation.close(Instant.now()));
+        assertEquals("Operation is already closed.", ex.getMessage());
+    }
+
+    @Test
+    void close_throwsWhenSaleDateIsNull() {
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
+        Operation operation = new Operation(10, 150.0, 160.0, null, null, brokerageFirm);
+        InvalidSaleDateException ex = assertThrows(InvalidSaleDateException.class,
+                () -> operation.close(null));
+        assertEquals("Sale date cannot be null.", ex.getMessage());
+    }
+
+    // --- isProfitable ---
+
+    @Test
+    void isProfitable_returnsTrueWhenNetEarningsArePositive() {
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
+        Operation operation = new Operation(10, 150.0, 200.0, Instant.now(), null, brokerageFirm);
+        assertTrue(operation.isProfitable());
+    }
+
+    @Test
+    void isProfitable_returnsFalseWhenNetEarningsAreNegative() {
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
+        Operation operation = new Operation(10, 200.0, 150.0, Instant.now(), null, brokerageFirm);
+        assertFalse(operation.isProfitable());
+    }
+
+    @Test
+    void isProfitable_returnsFalseWhenNetEarningsAreZero() {
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0);
+        Operation operation = new Operation(10, 150.0, 150.0, Instant.now(), null, brokerageFirm);
+        assertFalse(operation.isProfitable());
+    }
+
+    @Test
+    void isProfitable_throwsWhenOperationIsOpen() {
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
+        Operation operation = new Operation(10, 150.0, 160.0, null, null, brokerageFirm);
+        OperationStillOpenException ex = assertThrows(OperationStillOpenException.class,
+                () -> operation.isProfitable());
+        assertEquals("Cannot determine profitability of an open operation.", ex.getMessage());
     }
 }
 
