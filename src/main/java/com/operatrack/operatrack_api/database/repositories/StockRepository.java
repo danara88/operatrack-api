@@ -1,6 +1,6 @@
-package com.operatrack.operatrack_api.repositories;
+package com.operatrack.operatrack_api.database.repositories;
 
-import com.operatrack.operatrack_api.repositories.entities.StockEntity;
+import com.operatrack.operatrack_api.database.entities.StockEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StockRepository extends JpaRepository<StockEntity, String> {

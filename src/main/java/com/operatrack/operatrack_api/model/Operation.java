@@ -152,6 +152,42 @@ public class Operation {
         this.stockId = stockId;
     }
 
+    /**
+     * Reconstruction constructor for restoring an Operation from persistence.
+     * Use this constructor when restoring an operation from the database, where all tax values
+     * are already computed and stored.
+     *
+     * @param id            operation identifier
+     * @param shareQuantity number of shares (≥ 0)
+     * @param purchasePrice price per share at purchase (≥ 0)
+     * @param totalValue    total monetary value of the operation (≥ 0)
+     * @param capitalGain   capital gain from the operation
+     * @param purchaseTax   pre-computed purchase tax amount
+     * @param saleTax       pre-computed sale tax amount
+     * @param totalTax      pre-computed total tax amount
+     * @param netEarnings   net earnings after taxes
+     * @param purchaseDate  date of purchase
+     * @param saleDate      date of sale, may be {@code null} if not yet sold
+     * @param stockId       identifier of the associated stock
+     */
+    public Operation(String id, Integer shareQuantity, Double purchasePrice, Double totalValue,
+                     Double capitalGain, Double purchaseTax, Double saleTax, Double totalTax,
+                     Double netEarnings, Instant purchaseDate, Instant saleDate, String stockId) {
+        validateFields(shareQuantity, purchasePrice, totalValue);
+        this.id = id;
+        this.shareQuantity = shareQuantity;
+        this.purchasePrice = purchasePrice;
+        this.totalValue = totalValue;
+        this.capitalGain = capitalGain;
+        this.purchaseTax = purchaseTax;
+        this.saleTax = saleTax;
+        this.totalTax = totalTax;
+        this.netEarnings = netEarnings;
+        this.purchaseDate = purchaseDate;
+        this.saleDate = saleDate;
+        this.stockId = stockId;
+    }
+
     private void validateFields(Integer shareQuantity, Double purchasePrice, Double totalValue) {
         if (shareQuantity == null || shareQuantity < 0) {
             throw new InvalidShareQuantityException("Share quantity must be zero or a positive number.");
