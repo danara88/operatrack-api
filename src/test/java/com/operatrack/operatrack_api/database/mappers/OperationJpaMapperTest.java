@@ -125,8 +125,8 @@ class OperationJpaMapperTest {
     void toEntity_mapsAllFieldsCorrectly() {
         BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
         Operation operation = new Operation(
-                OPERATION_ID, 10, 150.0, 160.0, 1500.0, 50.0,
-                35.0, Instant.parse("2024-01-15T10:00:00Z"), null, STOCK_ID, brokerageFirm
+                OPERATION_ID, 10, 150.0, 160.0,
+                Instant.parse("2024-01-15T10:00:00Z"), null, STOCK_ID, brokerageFirm
         );
         StockEntity stockEntity = buildStockEntity();
         BrokerageFirmEntity brokerageFirmEntity = buildBrokerageFirmEntity();
@@ -136,12 +136,12 @@ class OperationJpaMapperTest {
         assertEquals(OPERATION_ID, entity.getId());
         assertEquals(10, entity.getShareQuantity());
         assertEquals(150.0, entity.getPurchasePrice());
-        assertEquals(1500.0, entity.getTotalValue());
-        assertEquals(50.0, entity.getCapitalGain());
+        assertEquals(10 * 160.0, entity.getTotalValue(), 1e-9);
+        assertEquals((10 * 160.0) - (10 * 150.0), entity.getCapitalGain(), 1e-9);
         assertEquals(operation.getPurchaseTax(), entity.getPurchaseTax());
         assertEquals(operation.getSaleTax(), entity.getSaleTax());
         assertEquals(operation.getTotalTax(), entity.getTotalTax());
-        assertEquals(35.0, entity.getNetEarnings());
+        assertEquals(operation.getNetEarnings(), entity.getNetEarnings());
         assertEquals(Instant.parse("2024-01-15T10:00:00Z"), entity.getPurchaseDate());
         assertNull(entity.getSaleDate());
         assertEquals(stockEntity, entity.getStock());
@@ -153,8 +153,8 @@ class OperationJpaMapperTest {
         BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
         Instant saleDate = Instant.parse("2024-06-01T12:00:00Z");
         Operation operation = new Operation(
-                OPERATION_ID, 10, 150.0, 160.0, 1500.0, 50.0,
-                35.0, Instant.parse("2024-01-15T10:00:00Z"), saleDate, STOCK_ID, brokerageFirm
+                OPERATION_ID, 10, 150.0, 160.0,
+                Instant.parse("2024-01-15T10:00:00Z"), saleDate, STOCK_ID, brokerageFirm
         );
         StockEntity stockEntity = buildStockEntity();
         BrokerageFirmEntity brokerageFirmEntity = buildBrokerageFirmEntity();
