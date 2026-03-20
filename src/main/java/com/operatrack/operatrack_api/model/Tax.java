@@ -1,6 +1,5 @@
 package com.operatrack.operatrack_api.model;
 
-import java.util.UUID;
 import com.operatrack.operatrack_api.model.exceptions.InvalidInstitutionNameException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidTaxRateException;
 import lombok.Getter;
@@ -17,7 +16,7 @@ public class Tax {
      * The unique identifier for the tax entity.
      */
     @Getter
-    private final String id;
+    private String id;
 
     /**
      * The name of the financial institution or brokerage firm that applies this tax.
@@ -42,7 +41,6 @@ public class Tax {
      */
     public Tax(String institutionName, Double taxRate) {
         validateFields(institutionName, taxRate);
-        this.id = UUID.randomUUID().toString();
         this.institutionName = institutionName;
         this.taxRate = taxRate;
     }

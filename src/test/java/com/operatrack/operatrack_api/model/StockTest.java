@@ -16,8 +16,7 @@ class StockTest {
     @Test
     void constructor_createsValidStock() {
         Stock stock = new Stock("Apple Inc.", "AAPL", 150.0);
-        assertNotNull(stock.getId());
-        assertDoesNotThrow(() -> UUID.fromString(stock.getId()));
+        assertNull(stock.getId());
         assertEquals("Apple Inc.", stock.getName());
         assertEquals("AAPL", stock.getTickerSymbol());
         assertEquals(150.0, stock.getCurrentPrice());

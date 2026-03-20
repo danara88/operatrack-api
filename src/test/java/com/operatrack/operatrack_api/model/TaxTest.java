@@ -15,8 +15,7 @@ class TaxTest {
     @Test
     void constructor_createsValidTax() {
         Tax tax = new Tax("Scotiabank", 0.0035);
-        assertNotNull(tax.getId());
-        assertDoesNotThrow(() -> UUID.fromString(tax.getId()));
+        assertNull(tax.getId());
         assertEquals("Scotiabank", tax.getInstitutionName());
         assertEquals(0.0035, tax.getTaxRate());
     }

@@ -1,7 +1,5 @@
 package com.operatrack.operatrack_api.model;
 
-import java.util.UUID;
-
 import com.operatrack.operatrack_api.model.exceptions.InvalidCurrentPriceException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidStockNameException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidTickerSymbolException;
@@ -18,7 +16,7 @@ public class Stock {
      * Unique identifier for the stock.
      */
     @Getter
-    private final String id;
+    private String id;
 
     /**
      * Full name of the company associated with the stock.
@@ -51,7 +49,6 @@ public class Stock {
      */
     public Stock(String name, String tickerSymbol, Double currentPrice) {
         validateFields(name, tickerSymbol, currentPrice);
-        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.tickerSymbol = tickerSymbol;
         this.currentPrice = currentPrice;

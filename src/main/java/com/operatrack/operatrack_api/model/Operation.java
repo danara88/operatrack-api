@@ -1,7 +1,6 @@
 package com.operatrack.operatrack_api.model;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import com.operatrack.operatrack_api.model.exceptions.InvalidPurchasePriceException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidShareQuantityException;
@@ -19,7 +18,7 @@ public class Operation {
      * The unique identifier of the operation.
      */
     @Getter
-		private final String id;
+		private String id;
 
     /**
      * The number of shares involved in the operation.
@@ -105,7 +104,6 @@ public class Operation {
                      Double capitalGain, Double netEarnings, Instant saleDate,
                      String stockId, Tax tax) {
         validateFields(shareQuantity, purchasePrice, totalValue);
-        this.id = UUID.randomUUID().toString();
         this.shareQuantity = shareQuantity;
         this.purchasePrice = purchasePrice;
         this.totalValue = totalValue;

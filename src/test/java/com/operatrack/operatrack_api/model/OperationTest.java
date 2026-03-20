@@ -18,8 +18,7 @@ class OperationTest {
     void constructor_createsValidOperation() {
         Tax tax = new Tax("BBVA", 0.0035);
         Operation operation = new Operation(10, 150.0, 160.0, 1500.0, 50.0, 35.0, null, null, tax);
-        assertNotNull(operation.getId());
-        assertDoesNotThrow(() -> UUID.fromString(operation.getId()));
+        assertNull(operation.getId());
         assertEquals(10, operation.getShareQuantity());
         assertEquals(150.0, operation.getPurchasePrice());
         assertEquals(1500.0, operation.getTotalValue());
