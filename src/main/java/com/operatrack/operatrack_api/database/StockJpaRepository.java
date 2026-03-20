@@ -4,6 +4,8 @@ import com.operatrack.operatrack_api.database.entities.StockEntity;
 import com.operatrack.operatrack_api.database.mappers.StockJpaMapper;
 import com.operatrack.operatrack_api.database.repositories.StockRepository;
 import com.operatrack.operatrack_api.model.Stock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,6 +19,11 @@ public class StockJpaRepository {
 
     public boolean existsByTickerSymbol(String tickerSymbol) {
         return stockRepository.existsByTickerSymbol(tickerSymbol);
+    }
+
+    public Page<Stock> findAll(int page, int size) {
+        return stockRepository.findAll(PageRequest.of(page, size))
+                .map(StockJpaMapper::toDomain);
     }
 
     public Stock save(Stock stock) {
