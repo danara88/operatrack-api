@@ -6,7 +6,7 @@ import com.operatrack.operatrack_api.controllers.responses.ErrorInfo;
 import com.operatrack.operatrack_api.model.exceptions.InvalidCurrentPriceException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidInstitutionNameException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidStockNameException;
-import com.operatrack.operatrack_api.model.exceptions.InvalidTaxRateException;
+import com.operatrack.operatrack_api.model.exceptions.InvalidBrokerageFirmRateException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidTickerSymbolException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
             InvalidTickerSymbolException.class,
             InvalidCurrentPriceException.class,
             InvalidInstitutionNameException.class,
-            InvalidTaxRateException.class
+            InvalidBrokerageFirmRateException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorInfo handleDomainExceptions(RuntimeException ex, HttpServletRequest request) {

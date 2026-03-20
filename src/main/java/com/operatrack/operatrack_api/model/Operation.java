@@ -97,20 +97,20 @@ public class Operation {
      * @param capitalGain   capital gain from the operation
      * @param netEarnings   net earnings after taxes
      * @param saleDate      date of sale, may be {@code null} if not yet sold
-     * @param stockId       identifier of the associated stock
-     * @param tax           the tax entity used to calculate purchase tax, sale tax, and total tax
+     * @param stockId          identifier of the associated stock
+     * @param brokerageFirm    the brokerage firm used to calculate purchase tax, sale tax, and total tax
      */
     public Operation(Integer shareQuantity, Double purchasePrice, Double currentPrice, Double totalValue,
                      Double capitalGain, Double netEarnings, Instant saleDate,
-                     String stockId, Tax tax) {
+                     String stockId, BrokerageFirm brokerageFirm) {
         validateFields(shareQuantity, purchasePrice, totalValue);
         this.shareQuantity = shareQuantity;
         this.purchasePrice = purchasePrice;
         this.totalValue = totalValue;
         this.capitalGain = capitalGain;
-        this.purchaseTax = tax.calculatePurchaseTax(shareQuantity, purchasePrice);
-        this.saleTax = tax.calculateSaleTax(shareQuantity, currentPrice);
-        this.totalTax = tax.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
+        this.purchaseTax = brokerageFirm.calculatePurchaseTax(shareQuantity, purchasePrice);
+        this.saleTax = brokerageFirm.calculateSaleTax(shareQuantity, currentPrice);
+        this.totalTax = brokerageFirm.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
         this.netEarnings = netEarnings;
         this.purchaseDate = Instant.now();
         this.saleDate = saleDate;
@@ -120,30 +120,30 @@ public class Operation {
     /**
      * Constructor with provided id and purchase date.
      *
-     * @param id            operation identifier
-     * @param shareQuantity number of shares (≥ 0)
-     * @param purchasePrice price per share at purchase (≥ 0)
-     * @param currentPrice  current market price per share
-     * @param totalValue    total monetary value of the operation (≥ 0)
-     * @param capitalGain   capital gain from the operation
-     * @param netEarnings   net earnings after taxes
-     * @param purchaseDate  date of purchase
-     * @param saleDate      date of sale, may be {@code null} if not yet sold
-     * @param stockId       identifier of the associated stock
-     * @param tax           the tax entity used to calculate purchase tax, sale tax, and total tax
+     * @param id               operation identifier
+     * @param shareQuantity    number of shares (≥ 0)
+     * @param purchasePrice    price per share at purchase (≥ 0)
+     * @param currentPrice     current market price per share
+     * @param totalValue       total monetary value of the operation (≥ 0)
+     * @param capitalGain      capital gain from the operation
+     * @param netEarnings      net earnings after taxes
+     * @param purchaseDate     date of purchase
+     * @param saleDate         date of sale, may be {@code null} if not yet sold
+     * @param stockId          identifier of the associated stock
+     * @param brokerageFirm    the brokerage firm used to calculate purchase tax, sale tax, and total tax
      */
     public Operation(String id, Integer shareQuantity, Double purchasePrice, Double currentPrice, Double totalValue,
                      Double capitalGain, Double netEarnings, Instant purchaseDate,
-                     Instant saleDate, String stockId, Tax tax) {
+                     Instant saleDate, String stockId, BrokerageFirm brokerageFirm) {
         validateFields(shareQuantity, purchasePrice, totalValue);
         this.id = id;
         this.shareQuantity = shareQuantity;
         this.purchasePrice = purchasePrice;
         this.totalValue = totalValue;
         this.capitalGain = capitalGain;
-        this.purchaseTax = tax.calculatePurchaseTax(shareQuantity, purchasePrice);
-        this.saleTax = tax.calculateSaleTax(shareQuantity, currentPrice);
-        this.totalTax = tax.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
+        this.purchaseTax = brokerageFirm.calculatePurchaseTax(shareQuantity, purchasePrice);
+        this.saleTax = brokerageFirm.calculateSaleTax(shareQuantity, currentPrice);
+        this.totalTax = brokerageFirm.calculateTotalTax(shareQuantity, purchasePrice, currentPrice);
         this.netEarnings = netEarnings;
         this.purchaseDate = purchaseDate;
         this.saleDate = saleDate;

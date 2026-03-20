@@ -1,19 +1,19 @@
 package com.operatrack.operatrack_api.model;
 
 import com.operatrack.operatrack_api.model.exceptions.InvalidInstitutionNameException;
-import com.operatrack.operatrack_api.model.exceptions.InvalidTaxRateException;
+import com.operatrack.operatrack_api.model.exceptions.InvalidBrokerageFirmRateException;
 import lombok.Getter;
 
 /**
- * Represents a tax entity associated with a brokerage firm or financial institution.
+ * Represents a brokerage firm or financial institution.
  * Each institution may apply a different tax rate, which can be reused across multiple operations.
  */
-public class Tax {
+public class BrokerageFirm {
 
     private static final double VAT_MULTIPLIER = 1.16;
 
     /**
-     * The unique identifier for the tax entity.
+     * The unique identifier for the brokerage firm.
      */
     @Getter
     private String id;
@@ -31,31 +31,31 @@ public class Tax {
     private Double taxRate;
 
     /**
-     * Creates a new Tax entity with the given institution name and tax rate.
+     * Creates a new BrokerageFirm with the given institution name and tax rate.
      * The unique identifier is automatically generated as a random UUID string.
      *
      * @param institutionName the name of the financial institution (must be at least 4 characters)
      * @param taxRate         the decimal tax rate (must be between 0 and 1)
      * @throws InvalidInstitutionNameException if the institution name is null or fewer than 4 characters
-     * @throws InvalidTaxRateException if the tax rate is null or not between 0 and 1
+     * @throws InvalidBrokerageFirmRateException if the tax rate is null or not between 0 and 1
      */
-    public Tax(String institutionName, Double taxRate) {
+    public BrokerageFirm(String institutionName, Double taxRate) {
         validateFields(institutionName, taxRate);
         this.institutionName = institutionName;
         this.taxRate = taxRate;
     }
 
     /**
-     * Creates a new Tax entity with a provided identifier, institution name, and tax rate.
+     * Creates a new BrokerageFirm with a provided identifier, institution name, and tax rate.
      * Use this constructor when the unique identifier is known in advance (e.g., when restoring from persistence).
      *
-     * @param id              the unique identifier to assign to this tax entity
+     * @param id              the unique identifier to assign to this brokerage firm
      * @param institutionName the name of the financial institution (must be at least 4 characters)
      * @param taxRate         the decimal tax rate (must be between 0 and 1)
      * @throws InvalidInstitutionNameException if the institution name is null or fewer than 4 characters
-     * @throws InvalidTaxRateException if the tax rate is null or not between 0 and 1
+     * @throws InvalidBrokerageFirmRateException if the tax rate is null or not between 0 and 1
      */
-    public Tax(String id, String institutionName, Double taxRate) {
+    public BrokerageFirm(String id, String institutionName, Double taxRate) {
         validateFields(institutionName, taxRate);
         this.id = id;
         this.institutionName = institutionName;
@@ -71,7 +71,7 @@ public class Tax {
 
     public void updateTaxRate(Double taxRate) {
         if (taxRate == null || taxRate < 0 || taxRate > 1) {
-            throw new InvalidTaxRateException("Tax rate must be between 0 and 1.");
+            throw new InvalidBrokerageFirmRateException("Tax rate must be between 0 and 1.");
         }
         this.taxRate = taxRate;
     }
@@ -81,7 +81,7 @@ public class Tax {
             throw new InvalidInstitutionNameException("Institution Name must be 4 characters length.");
         }
         if (taxRate == null || taxRate < 0 || taxRate > 1) {
-            throw new InvalidTaxRateException("Tax rate must be between 0 and 1.");
+            throw new InvalidBrokerageFirmRateException("Tax rate must be between 0 and 1.");
         }
     }
 
@@ -119,7 +119,6 @@ public class Tax {
      * @return the total tax amount
      */
     public double calculateTotalTax(int shareQuantity, double purchasePrice, double currentPrice) {
-        return calculatePurchaseTax(shareQuantity, purchasePrice)
-             + calculateSaleTax(shareQuantity, currentPrice);
+        return calculatePurchaseTax(shareQuantity, purchasePrice) + calculateSaleTax(shareQuantity, currentPrice);
     }
 }

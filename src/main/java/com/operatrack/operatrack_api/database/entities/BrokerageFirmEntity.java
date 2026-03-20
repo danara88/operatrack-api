@@ -24,14 +24,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "taxes")
+@Table(name = "brokerage_firms")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaxEntity {
+public class BrokerageFirmEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -44,7 +44,7 @@ public class TaxEntity {
     @Column(name = "tax_rate", nullable = false)
     private Double taxRate;
 
-    @OneToMany(mappedBy = "tax", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "brokerageFirm", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<OperationEntity> operations = new ArrayList<>();
 

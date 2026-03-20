@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-public record CreateTaxRequestDTO(
+public record UpdateBrokerageFirmRequestDTO(
         @NotBlank String institutionName,
         @NotNull @PositiveOrZero Double taxRate
 ) {

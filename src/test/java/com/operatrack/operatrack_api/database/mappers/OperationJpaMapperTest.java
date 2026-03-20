@@ -2,9 +2,9 @@ package com.operatrack.operatrack_api.database.mappers;
 
 import com.operatrack.operatrack_api.database.entities.OperationEntity;
 import com.operatrack.operatrack_api.database.entities.StockEntity;
-import com.operatrack.operatrack_api.database.entities.TaxEntity;
+import com.operatrack.operatrack_api.database.entities.BrokerageFirmEntity;
 import com.operatrack.operatrack_api.model.Operation;
-import com.operatrack.operatrack_api.model.Tax;
+import com.operatrack.operatrack_api.model.BrokerageFirm;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -15,7 +15,7 @@ class OperationJpaMapperTest {
 
     private static final String OPERATION_ID = "op-uuid-1";
     private static final String STOCK_ID = "stock-uuid-1";
-    private static final String TAX_ID = "tax-uuid-1";
+    private static final String BROKERAGE_FIRM_ID = "tax-uuid-1";
 
     private StockEntity buildStockEntity() {
         return StockEntity.builder()
@@ -26,15 +26,15 @@ class OperationJpaMapperTest {
                 .build();
     }
 
-    private TaxEntity buildTaxEntity() {
-        return TaxEntity.builder()
-                .id(TAX_ID)
+    private BrokerageFirmEntity buildBrokerageFirmEntity() {
+        return BrokerageFirmEntity.builder()
+                .id(BROKERAGE_FIRM_ID)
                 .institutionName("Scotiabank")
                 .taxRate(0.0035)
                 .build();
     }
 
-    private OperationEntity buildOperationEntity(StockEntity stockEntity, TaxEntity taxEntity) {
+    private OperationEntity buildOperationEntity(StockEntity stockEntity, BrokerageFirmEntity brokerageFirmEntity) {
         return OperationEntity.builder()
                 .id(OPERATION_ID)
                 .shareQuantity(10)
@@ -48,7 +48,7 @@ class OperationJpaMapperTest {
                 .purchaseDate(Instant.parse("2024-01-15T10:00:00Z"))
                 .saleDate(null)
                 .stock(stockEntity)
-                .tax(taxEntity)
+                .brokerageFirm(brokerageFirmEntity)
                 .build();
     }
 
@@ -57,8 +57,8 @@ class OperationJpaMapperTest {
     @Test
     void toDomain_mapsAllFieldsCorrectly() {
         StockEntity stockEntity = buildStockEntity();
-        TaxEntity taxEntity = buildTaxEntity();
-        OperationEntity entity = buildOperationEntity(stockEntity, taxEntity);
+        BrokerageFirmEntity brokerageFirmEntity = buildBrokerageFirmEntity();
+        OperationEntity entity = buildOperationEntity(stockEntity, brokerageFirmEntity);
 
         Operation operation = OperationJpaMapper.toDomain(entity);
 
@@ -79,9 +79,9 @@ class OperationJpaMapperTest {
     @Test
     void toDomain_mapsSaleDateWhenPresent() {
         StockEntity stockEntity = buildStockEntity();
-        TaxEntity taxEntity = buildTaxEntity();
+        BrokerageFirmEntity brokerageFirmEntity = buildBrokerageFirmEntity();
         Instant saleDate = Instant.parse("2024-06-01T12:00:00Z");
-        OperationEntity entity = buildOperationEntity(stockEntity, taxEntity);
+        OperationEntity entity = buildOperationEntity(stockEntity, brokerageFirmEntity);
         entity.setSaleDate(saleDate);
 
         Operation operation = OperationJpaMapper.toDomain(entity);
@@ -92,8 +92,8 @@ class OperationJpaMapperTest {
     @Test
     void toDomain_mapsZeroTaxValues() {
         StockEntity stockEntity = buildStockEntity();
-        TaxEntity taxEntity = TaxEntity.builder()
-                .id(TAX_ID)
+        BrokerageFirmEntity brokerageFirmEntity = BrokerageFirmEntity.builder()
+                .id(BROKERAGE_FIRM_ID)
                 .institutionName("Zero Bank")
                 .taxRate(0.0)
                 .build();
@@ -109,7 +109,7 @@ class OperationJpaMapperTest {
                 .netEarnings(0.0)
                 .purchaseDate(Instant.now())
                 .stock(stockEntity)
-                .tax(taxEntity)
+                .brokerageFirm(brokerageFirmEntity)
                 .build();
 
         Operation operation = OperationJpaMapper.toDomain(entity);
@@ -123,15 +123,15 @@ class OperationJpaMapperTest {
 
     @Test
     void toEntity_mapsAllFieldsCorrectly() {
-        Tax tax = new Tax("BBVA", 0.0035);
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
         Operation operation = new Operation(
                 OPERATION_ID, 10, 150.0, 160.0, 1500.0, 50.0,
-                35.0, Instant.parse("2024-01-15T10:00:00Z"), null, STOCK_ID, tax
+                35.0, Instant.parse("2024-01-15T10:00:00Z"), null, STOCK_ID, brokerageFirm
         );
         StockEntity stockEntity = buildStockEntity();
-        TaxEntity taxEntity = buildTaxEntity();
+        BrokerageFirmEntity brokerageFirmEntity = buildBrokerageFirmEntity();
 
-        OperationEntity entity = OperationJpaMapper.toEntity(operation, stockEntity, taxEntity);
+        OperationEntity entity = OperationJpaMapper.toEntity(operation, stockEntity, brokerageFirmEntity);
 
         assertEquals(OPERATION_ID, entity.getId());
         assertEquals(10, entity.getShareQuantity());
@@ -145,21 +145,21 @@ class OperationJpaMapperTest {
         assertEquals(Instant.parse("2024-01-15T10:00:00Z"), entity.getPurchaseDate());
         assertNull(entity.getSaleDate());
         assertEquals(stockEntity, entity.getStock());
-        assertEquals(taxEntity, entity.getTax());
+        assertEquals(brokerageFirmEntity, entity.getBrokerageFirm());
     }
 
     @Test
     void toEntity_mapsSaleDateWhenPresent() {
-        Tax tax = new Tax("BBVA", 0.0035);
+        BrokerageFirm brokerageFirm = new BrokerageFirm("BBVA", 0.0035);
         Instant saleDate = Instant.parse("2024-06-01T12:00:00Z");
         Operation operation = new Operation(
                 OPERATION_ID, 10, 150.0, 160.0, 1500.0, 50.0,
-                35.0, Instant.parse("2024-01-15T10:00:00Z"), saleDate, STOCK_ID, tax
+                35.0, Instant.parse("2024-01-15T10:00:00Z"), saleDate, STOCK_ID, brokerageFirm
         );
         StockEntity stockEntity = buildStockEntity();
-        TaxEntity taxEntity = buildTaxEntity();
+        BrokerageFirmEntity brokerageFirmEntity = buildBrokerageFirmEntity();
 
-        OperationEntity entity = OperationJpaMapper.toEntity(operation, stockEntity, taxEntity);
+        OperationEntity entity = OperationJpaMapper.toEntity(operation, stockEntity, brokerageFirmEntity);
 
         assertEquals(saleDate, entity.getSaleDate());
     }
@@ -167,11 +167,11 @@ class OperationJpaMapperTest {
     @Test
     void toDomain_andToEntity_areSymmetric() {
         StockEntity stockEntity = buildStockEntity();
-        TaxEntity taxEntity = buildTaxEntity();
-        OperationEntity original = buildOperationEntity(stockEntity, taxEntity);
+        BrokerageFirmEntity brokerageFirmEntity = buildBrokerageFirmEntity();
+        OperationEntity original = buildOperationEntity(stockEntity, brokerageFirmEntity);
 
         Operation domain = OperationJpaMapper.toDomain(original);
-        OperationEntity roundTripped = OperationJpaMapper.toEntity(domain, stockEntity, taxEntity);
+        OperationEntity roundTripped = OperationJpaMapper.toEntity(domain, stockEntity, brokerageFirmEntity);
 
         assertEquals(original.getId(), roundTripped.getId());
         assertEquals(original.getShareQuantity(), roundTripped.getShareQuantity());

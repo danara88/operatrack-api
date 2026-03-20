@@ -36,7 +36,7 @@ Follow the Ubiquitous Language approach to define the core entities of the syste
 
 - **Operation:** It is the core of the system. The main goal of the SaaS is to build a stock market operation history. Without it, there is no product.
 - **Stock:** The user needs to register the companies they want to monitor. Stock encapsulates the Ticker Symbol and the Current Price, which is the foundation for calculating gains, losses, and the total value of the position.
-- **Tax:** Each brokerage firm or financial institution may apply a different tax rate. By separating Tax as an independent entity, the user can define a specific tax percentage per brokerage firm and reuse it across multiple operations. This makes the system flexible and reusable. (e.g., Scotiabank has a tax rate of 0.35%, while Banorte has a tax rate of 0.25%)
+- **BrokerageFirm:** Each brokerage firm or financial institution may apply a different tax rate. By separating BrokerageFirm as an independent entity, the user can define a specific tax percentage per brokerage firm and reuse it across multiple operations. This makes the system flexible and reusable. (e.g., Scotiabank has a tax rate of 0.35%, while Banorte has a tax rate of 0.25%)
 
 ## Controllers
 

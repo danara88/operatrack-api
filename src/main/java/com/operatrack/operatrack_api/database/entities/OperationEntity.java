@@ -72,8 +72,8 @@ public class OperationEntity {
     private StockEntity stock;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tax_id", nullable = false)
-    private TaxEntity tax;
+    @JoinColumn(name = "brokerage_firm_id", nullable = false)
+    private BrokerageFirmEntity brokerageFirm;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -2,7 +2,7 @@ package com.operatrack.operatrack_api.database.mappers;
 
 import com.operatrack.operatrack_api.database.entities.OperationEntity;
 import com.operatrack.operatrack_api.database.entities.StockEntity;
-import com.operatrack.operatrack_api.database.entities.TaxEntity;
+import com.operatrack.operatrack_api.database.entities.BrokerageFirmEntity;
 import com.operatrack.operatrack_api.model.Operation;
 
 public class OperationJpaMapper {
@@ -26,7 +26,7 @@ public class OperationJpaMapper {
         );
     }
 
-    public static OperationEntity toEntity(Operation operation, StockEntity stockEntity, TaxEntity taxEntity) {
+    public static OperationEntity toEntity(Operation operation, StockEntity stockEntity, BrokerageFirmEntity brokerageFirmEntity) {
         return OperationEntity.builder()
                 .id(operation.getId())
                 .shareQuantity(operation.getShareQuantity())
@@ -40,7 +40,7 @@ public class OperationJpaMapper {
                 .purchaseDate(operation.getPurchaseDate())
                 .saleDate(operation.getSaleDate())
                 .stock(stockEntity)
-                .tax(taxEntity)
+                .brokerageFirm(brokerageFirmEntity)
                 .build();
     }
 }
