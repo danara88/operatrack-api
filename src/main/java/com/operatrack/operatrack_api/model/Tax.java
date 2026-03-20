@@ -22,13 +22,13 @@ public class Tax {
      * The name of the financial institution or brokerage firm that applies this tax.
      */
     @Getter
-    private final String institutionName;
+    private String institutionName;
 
     /**
      * The tax rate applied by the institution (e.g., 0.0035 for 0.35%). Must be between 0 and 1.
      */
     @Getter
-    private final Double taxRate;
+    private Double taxRate;
 
     /**
      * Creates a new Tax entity with the given institution name and tax rate.
@@ -59,6 +59,20 @@ public class Tax {
         validateFields(institutionName, taxRate);
         this.id = id;
         this.institutionName = institutionName;
+        this.taxRate = taxRate;
+    }
+
+    public void updateInstitutionName(String institutionName) {
+        if (institutionName == null || institutionName.length() < 4) {
+            throw new InvalidInstitutionNameException("Institution Name must be 4 characters length.");
+        }
+        this.institutionName = institutionName;
+    }
+
+    public void updateTaxRate(Double taxRate) {
+        if (taxRate == null || taxRate < 0 || taxRate > 1) {
+            throw new InvalidTaxRateException("Tax rate must be between 0 and 1.");
+        }
         this.taxRate = taxRate;
     }
 

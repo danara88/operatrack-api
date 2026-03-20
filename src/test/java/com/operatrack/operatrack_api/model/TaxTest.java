@@ -132,4 +132,83 @@ class TaxTest {
         double result = tax.calculateTotalTax(100, 50.0, 55.0);
         assertEquals(42.63, result, 1e-9);
     }
+
+    // --- updateInstitutionName ---
+
+    @Test
+    void updateInstitutionName_updatesName_whenValid() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        tax.updateInstitutionName("Banorte");
+        assertEquals("Banorte", tax.getInstitutionName());
+    }
+
+    @Test
+    void updateInstitutionName_throwsWhenNameIsNull() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        InvalidInstitutionNameException ex = assertThrows(InvalidInstitutionNameException.class,
+                () -> tax.updateInstitutionName(null));
+        assertEquals("Institution Name must be 4 characters length.", ex.getMessage());
+    }
+
+    @Test
+    void updateInstitutionName_throwsWhenNameIsTooShort() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        InvalidInstitutionNameException ex = assertThrows(InvalidInstitutionNameException.class,
+                () -> tax.updateInstitutionName("ABC"));
+        assertEquals("Institution Name must be 4 characters length.", ex.getMessage());
+    }
+
+    @Test
+    void updateInstitutionName_acceptsNameWithExactlyFourCharacters() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        tax.updateInstitutionName("BBVA");
+        assertEquals("BBVA", tax.getInstitutionName());
+    }
+
+    // --- updateTaxRate ---
+
+    @Test
+    void updateTaxRate_updatesRate_whenValid() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        tax.updateTaxRate(0.005);
+        assertEquals(0.005, tax.getTaxRate());
+    }
+
+    @Test
+    void updateTaxRate_throwsWhenRateIsNull() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        InvalidTaxRateException ex = assertThrows(InvalidTaxRateException.class,
+                () -> tax.updateTaxRate(null));
+        assertEquals("Tax rate must be between 0 and 1.", ex.getMessage());
+    }
+
+    @Test
+    void updateTaxRate_throwsWhenRateIsNegative() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        InvalidTaxRateException ex = assertThrows(InvalidTaxRateException.class,
+                () -> tax.updateTaxRate(-0.01));
+        assertEquals("Tax rate must be between 0 and 1.", ex.getMessage());
+    }
+
+    @Test
+    void updateTaxRate_throwsWhenRateIsGreaterThanOne() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        InvalidTaxRateException ex = assertThrows(InvalidTaxRateException.class,
+                () -> tax.updateTaxRate(1.01));
+        assertEquals("Tax rate must be between 0 and 1.", ex.getMessage());
+    }
+
+    @Test
+    void updateTaxRate_acceptsBoundaryRateOfZero() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        tax.updateTaxRate(0.0);
+        assertEquals(0.0, tax.getTaxRate());
+    }
+
+    @Test
+    void updateTaxRate_acceptsBoundaryRateOfOne() {
+        Tax tax = new Tax("Scotiabank", 0.0035);
+        tax.updateTaxRate(1.0);
+        assertEquals(1.0, tax.getTaxRate());
+    }
 }

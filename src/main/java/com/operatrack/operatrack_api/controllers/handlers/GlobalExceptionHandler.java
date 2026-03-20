@@ -4,7 +4,9 @@ import com.operatrack.operatrack_api.controllers.exceptions.DuplicatedResourceEx
 import com.operatrack.operatrack_api.controllers.exceptions.ResourceNotFoundException;
 import com.operatrack.operatrack_api.controllers.responses.ErrorInfo;
 import com.operatrack.operatrack_api.model.exceptions.InvalidCurrentPriceException;
+import com.operatrack.operatrack_api.model.exceptions.InvalidInstitutionNameException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidStockNameException;
+import com.operatrack.operatrack_api.model.exceptions.InvalidTaxRateException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidTickerSymbolException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             InvalidStockNameException.class,
             InvalidTickerSymbolException.class,
-            InvalidCurrentPriceException.class
+            InvalidCurrentPriceException.class,
+            InvalidInstitutionNameException.class,
+            InvalidTaxRateException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorInfo handleDomainExceptions(RuntimeException ex, HttpServletRequest request) {
