@@ -34,7 +34,7 @@ public class Stock {
      * Current market price of one share of the stock.
      */
     @Getter
-    private final Double currentPrice;
+    private Double currentPrice;
 
     /**
      * Creates a new Stock entity with validation.
@@ -72,6 +72,13 @@ public class Stock {
         this.name = name;
         this.tickerSymbol = tickerSymbol;
         this.currentPrice = currentPrice;
+    }
+
+    public void updateCurrentPrice(Double newPrice) {
+        if (newPrice == null || newPrice < 0) {
+            throw new InvalidCurrentPriceException("Current price must be zero or a positive number.");
+        }
+        this.currentPrice = newPrice;
     }
 
     private void validateFields(String name, String tickerSymbol, Double currentPrice) {

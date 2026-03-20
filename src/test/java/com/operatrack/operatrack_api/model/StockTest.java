@@ -144,4 +144,36 @@ class StockTest {
         assertThrows(InvalidCurrentPriceException.class,
                 () -> new Stock("custom-id", "Apple Inc.", "AAPL", -1.0));
     }
+
+    // --- updateCurrentPrice ---
+
+    @Test
+    void updateCurrentPrice_updatesPrice_whenNewPriceIsPositive() {
+        Stock stock = new Stock("Apple Inc.", "AAPL", 150.0);
+        stock.updateCurrentPrice(200.0);
+        assertEquals(200.0, stock.getCurrentPrice());
+    }
+
+    @Test
+    void updateCurrentPrice_updatesPrice_whenNewPriceIsZero() {
+        Stock stock = new Stock("Apple Inc.", "AAPL", 150.0);
+        stock.updateCurrentPrice(0.0);
+        assertEquals(0.0, stock.getCurrentPrice());
+    }
+
+    @Test
+    void updateCurrentPrice_throwsWhenNewPriceIsNull() {
+        Stock stock = new Stock("Apple Inc.", "AAPL", 150.0);
+        InvalidCurrentPriceException ex = assertThrows(InvalidCurrentPriceException.class,
+                () -> stock.updateCurrentPrice(null));
+        assertEquals("Current price must be zero or a positive number.", ex.getMessage());
+    }
+
+    @Test
+    void updateCurrentPrice_throwsWhenNewPriceIsNegative() {
+        Stock stock = new Stock("Apple Inc.", "AAPL", 150.0);
+        InvalidCurrentPriceException ex = assertThrows(InvalidCurrentPriceException.class,
+                () -> stock.updateCurrentPrice(-10.0));
+        assertEquals("Current price must be zero or a positive number.", ex.getMessage());
+    }
 }

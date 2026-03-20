@@ -1,6 +1,7 @@
 package com.operatrack.operatrack_api.controllers.handlers;
 
 import com.operatrack.operatrack_api.controllers.exceptions.DuplicatedResourceException;
+import com.operatrack.operatrack_api.controllers.exceptions.ResourceNotFoundException;
 import com.operatrack.operatrack_api.controllers.responses.ErrorInfo;
 import com.operatrack.operatrack_api.model.exceptions.InvalidCurrentPriceException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidStockNameException;
@@ -34,6 +35,13 @@ public class GlobalExceptionHandler {
     public ErrorInfo handleDuplicatedResourceException(DuplicatedResourceException ex, HttpServletRequest request) {
         return new ErrorInfo(ex.getMessage(), request.getRequestURI(),
                 ex.getClass().getSimpleName(), HttpStatus.CONFLICT.value());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorInfo handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
+        return new ErrorInfo(ex.getMessage(), request.getRequestURI(),
+                ex.getClass().getSimpleName(), HttpStatus.NOT_FOUND.value());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

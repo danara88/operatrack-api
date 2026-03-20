@@ -1,6 +1,7 @@
 package com.operatrack.operatrack_api.services;
 
 import com.operatrack.operatrack_api.controllers.exceptions.DuplicatedResourceException;
+import com.operatrack.operatrack_api.controllers.exceptions.ResourceNotFoundException;
 import com.operatrack.operatrack_api.database.StockJpaRepository;
 import com.operatrack.operatrack_api.model.Stock;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -88,6 +90,44 @@ class StockServiceTest {
 
         assertThrows(DuplicatedResourceException.class,
                 () -> stockService.create("Microsoft", "MSFT", 300.0));
+
+        verify(stockJpaRepository, never()).save(any());
+    }
+
+    // --- updatePrice ---
+
+    @Test
+    void updatePrice_updatesAndReturnsStock_whenStockExists() {
+        Stock existing = new Stock("uuid-1", "Apple Inc.", "AAPL", 150.0);
+        Stock updated = new Stock("uuid-1", "Apple Inc.", "AAPL", 200.0);
+        when(stockJpaRepository.findById("uuid-1")).thenReturn(Optional.of(existing));
+        when(stockJpaRepository.save(existing)).thenReturn(updated);
+
+        Stock result = stockService.updatePrice("uuid-1", 200.0);
+
+        assertEquals(200.0, result.getCurrentPrice());
+        verify(stockJpaRepository).findById("uuid-1");
+        verify(stockJpaRepository).save(existing);
+    }
+
+    @Test
+    void updatePrice_throwsResourceNotFoundException_whenStockDoesNotExist() {
+        when(stockJpaRepository.findById("unknown-id")).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,
+                () -> stockService.updatePrice("unknown-id", 200.0));
+
+        assertEquals("Stock with id 'unknown-id' not found", ex.getMessage());
+        verify(stockJpaRepository).findById("unknown-id");
+        verify(stockJpaRepository, never()).save(any());
+    }
+
+    @Test
+    void updatePrice_doesNotSave_whenStockIsNotFound() {
+        when(stockJpaRepository.findById("missing")).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> stockService.updatePrice("missing", 99.0));
 
         verify(stockJpaRepository, never()).save(any());
     }

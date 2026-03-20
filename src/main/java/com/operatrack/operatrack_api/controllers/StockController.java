@@ -3,6 +3,7 @@ package com.operatrack.operatrack_api.controllers;
 import com.operatrack.operatrack_api.controllers.dtos.CreateStockRequestDTO;
 import com.operatrack.operatrack_api.controllers.dtos.CreateStockResponseDTO;
 import com.operatrack.operatrack_api.controllers.dtos.GetStockResponseDTO;
+import com.operatrack.operatrack_api.controllers.dtos.UpdateStockPriceRequestDTO;
 import com.operatrack.operatrack_api.controllers.responses.ApiResponse;
 import com.operatrack.operatrack_api.controllers.responses.PageResponse;
 import com.operatrack.operatrack_api.model.Stock;
@@ -11,6 +12,8 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +53,19 @@ public class StockController {
                 .build();
         return ApiResponse.<PageResponse<GetStockResponseDTO>>builder()
                 .data(pageResponse)
+                .status(HttpStatus.OK.value())
+                .build();
+    }
+
+    @PatchMapping("/{id}/price")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<GetStockResponseDTO> updateStockPrice(
+            @PathVariable String id,
+            @RequestBody @Valid UpdateStockPriceRequestDTO request) {
+        Stock stock = stockService.updatePrice(id, request.currentPrice());
+        GetStockResponseDTO data = new GetStockResponseDTO(stock.getId(), stock.getName(), stock.getTickerSymbol(), stock.getCurrentPrice());
+        return ApiResponse.<GetStockResponseDTO>builder()
+                .data(data)
                 .status(HttpStatus.OK.value())
                 .build();
     }
