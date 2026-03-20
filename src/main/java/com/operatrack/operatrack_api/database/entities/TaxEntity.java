@@ -1,4 +1,4 @@
-package com.operatrack.operatrack_api.repositories.entities;
+package com.operatrack.operatrack_api.database.entities;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -24,30 +24,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "stocks")
+@Table(name = "taxes")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockEntity {
+public class TaxEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false, updatable = false)
     private String id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "institution_name", nullable = false)
+    private String institutionName;
 
-    @Column(name = "ticker_symbol", nullable = false, unique = true)
-    private String tickerSymbol;
+    @Column(name = "tax_rate", nullable = false)
+    private Double taxRate;
 
-    @Column(name = "current_price", nullable = false)
-    private Double currentPrice;
-
-    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tax", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<OperationEntity> operations = new ArrayList<>();
 

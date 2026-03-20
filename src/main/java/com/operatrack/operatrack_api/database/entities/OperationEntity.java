@@ -1,4 +1,4 @@
-package com.operatrack.operatrack_api.repositories.entities;
+package com.operatrack.operatrack_api.database.entities;
 
 import java.time.Instant;
 
