@@ -131,4 +131,38 @@ class StockServiceTest {
 
         verify(stockJpaRepository, never()).save(any());
     }
+
+    // --- delete ---
+
+    @Test
+    void delete_deletesStock_whenStockExists() {
+        when(stockJpaRepository.existsById("uuid-1")).thenReturn(true);
+
+        stockService.delete("uuid-1");
+
+        verify(stockJpaRepository).existsById("uuid-1");
+        verify(stockJpaRepository).deleteById("uuid-1");
+    }
+
+    @Test
+    void delete_throwsResourceNotFoundException_whenStockDoesNotExist() {
+        when(stockJpaRepository.existsById("unknown-id")).thenReturn(false);
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,
+                () -> stockService.delete("unknown-id"));
+
+        assertEquals("Stock with id 'unknown-id' not found", ex.getMessage());
+        verify(stockJpaRepository).existsById("unknown-id");
+        verify(stockJpaRepository, never()).deleteById(any());
+    }
+
+    @Test
+    void delete_doesNotDelete_whenStockIsNotFound() {
+        when(stockJpaRepository.existsById("missing")).thenReturn(false);
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> stockService.delete("missing"));
+
+        verify(stockJpaRepository, never()).deleteById(any());
+    }
 }

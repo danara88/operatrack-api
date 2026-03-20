@@ -37,4 +37,12 @@ public class StockJpaRepository {
         StockEntity savedEntity = stockRepository.save(entity);
         return StockJpaMapper.toDomain(savedEntity);
     }
+
+    public boolean existsById(String id) {
+        return stockRepository.existsById(id);
+    }
+
+    public void deleteById(String id) {
+        stockRepository.deleteById(id);
+    }
 }

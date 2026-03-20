@@ -11,6 +11,7 @@ import com.operatrack.operatrack_api.services.StockService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,6 +69,12 @@ public class StockController {
                 .data(data)
                 .status(HttpStatus.OK.value())
                 .build();
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteStock(@PathVariable String id) {
+        stockService.delete(id);
     }
 
     @PostMapping

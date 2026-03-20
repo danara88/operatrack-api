@@ -34,4 +34,11 @@ public class StockService {
         Stock stock = new Stock(name, tickerSymbol, currentPrice);
         return stockJpaRepository.save(stock);
     }
+
+    public void delete(String id) {
+        if (!stockJpaRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Stock with id '" + id + "' not found");
+        }
+        stockJpaRepository.deleteById(id);
+    }
 }
