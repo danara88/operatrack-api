@@ -1,6 +1,9 @@
 package com.operatrack.operatrack_api.database;
 
+import com.operatrack.operatrack_api.database.entities.StockEntity;
+import com.operatrack.operatrack_api.database.mappers.StockJpaMapper;
 import com.operatrack.operatrack_api.database.repositories.StockRepository;
+import com.operatrack.operatrack_api.model.Stock;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,5 +13,11 @@ public class StockJpaRepository {
 
     public StockJpaRepository(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
+    }
+
+    public Stock save(Stock stock) {
+        StockEntity entity = StockJpaMapper.toEntity(stock);
+        StockEntity savedEntity = stockRepository.save(entity);
+        return StockJpaMapper.toDomain(savedEntity);
     }
 }
