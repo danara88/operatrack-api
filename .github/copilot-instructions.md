@@ -12,14 +12,22 @@
 Follow project standard hierarchy:
 
 ```
-com.opentrack_api
-├── controllers/         # REST endpoints (v1/, v2/ versioning)
-├── controllers/dtos     # Data Transfer Objects for API requests and responses
-├── controllers/handlers # Exception handlers for API errors
-├── model/               # Business domain entities
-├── services/            # Business logic services
-├── services/exceptions  # Custom exceptions for service layer
-├── repositories/        # Data access layer (e.g., JPA repositories)
+opentrack-api
+├── src/
+│   └── main/
+│       └── java/com/operatrack/operatrack_api/
+│           ├── controllers/        # REST endpoints (v1/, v2/ versioning)
+│           │   └── exceptions/     # Custom exceptions for controller layer
+│           │   └── dtos/           # Data Transfer Objects for API requests and responses
+│           │   └── handlers/       # Exception handlers for API errors
+│           │   └── responses/      # Response objects to standardize API endpoints responses
+│           ├── database/           # Data access layer (e.g., JPA repositories)
+│           │   └── entities/       # Database entities (Database tables)
+│           │   └── mappers/        # Database entity mappers (from domain entity to database entity and vice versa)
+│           │   └── repositories/   # Database repositories (Data access layer)
+│           ├── model/              # Business domain entities (Domain layer)
+│           │   └── exceptions/     # Custom exceptions for domain logic
+│           ├── services/           # Business logic services
 ```
 
 ## Domain Language
