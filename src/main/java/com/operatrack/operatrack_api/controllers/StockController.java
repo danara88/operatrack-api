@@ -2,6 +2,7 @@ package com.operatrack.operatrack_api.controllers;
 
 import com.operatrack.operatrack_api.controllers.dtos.CreateStockRequestDTO;
 import com.operatrack.operatrack_api.controllers.dtos.CreateStockResponseDTO;
+import com.operatrack.operatrack_api.controllers.responses.ApiResponse;
 import com.operatrack.operatrack_api.model.Stock;
 import com.operatrack.operatrack_api.services.StockService;
 import jakarta.validation.Valid;
@@ -24,8 +25,12 @@ public class StockController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateStockResponseDTO createStock(@RequestBody @Valid CreateStockRequestDTO request) {
+    public ApiResponse<CreateStockResponseDTO> createStock(@RequestBody @Valid CreateStockRequestDTO request) {
         Stock stock = stockService.create(request.name(), request.tickerSymbol(), request.currentPrice());
-        return new CreateStockResponseDTO(stock.getId(), stock.getName(), stock.getTickerSymbol(), stock.getCurrentPrice());
+        CreateStockResponseDTO data = new CreateStockResponseDTO(stock.getId(), stock.getName(), stock.getTickerSymbol(), stock.getCurrentPrice());
+        return ApiResponse.<CreateStockResponseDTO>builder()
+                .data(data)
+                .status(HttpStatus.CREATED.value())
+                .build();
     }
 }
