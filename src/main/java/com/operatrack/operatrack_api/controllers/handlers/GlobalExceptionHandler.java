@@ -1,8 +1,11 @@
 package com.operatrack.operatrack_api.controllers.handlers;
 
+import com.operatrack.operatrack_api.controllers.exceptions.DuplicatedResourceException;
+import com.operatrack.operatrack_api.controllers.responses.ErrorInfo;
 import com.operatrack.operatrack_api.model.exceptions.InvalidCurrentPriceException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidStockNameException;
 import com.operatrack.operatrack_api.model.exceptions.InvalidTickerSymbolException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,17 +24,26 @@ public class GlobalExceptionHandler {
             InvalidCurrentPriceException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleDomainExceptions(RuntimeException ex) {
-        return Map.of("message", ex.getMessage());
+    public ErrorInfo handleDomainExceptions(RuntimeException ex, HttpServletRequest request) {
+        return new ErrorInfo(ex.getMessage(), request.getRequestURI(),
+                ex.getClass().getSimpleName(), HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ExceptionHandler(DuplicatedResourceException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorInfo handleDuplicatedResourceException(DuplicatedResourceException ex, HttpServletRequest request) {
+        return new ErrorInfo(ex.getMessage(), request.getRequestURI(),
+                ex.getClass().getSimpleName(), HttpStatus.CONFLICT.value());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ErrorInfo handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
         );
-        return errors;
+        return new ErrorInfo(ex.getMessage(), request.getRequestURI(),
+                ex.getClass().getSimpleName(), HttpStatus.BAD_REQUEST.value(), errors);
     }
 }

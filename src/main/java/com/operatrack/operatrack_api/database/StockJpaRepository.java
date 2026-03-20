@@ -15,6 +15,10 @@ public class StockJpaRepository {
         this.stockRepository = stockRepository;
     }
 
+    public boolean existsByTickerSymbol(String tickerSymbol) {
+        return stockRepository.existsByTickerSymbol(tickerSymbol);
+    }
+
     public Stock save(Stock stock) {
         StockEntity entity = StockJpaMapper.toEntity(stock);
         StockEntity savedEntity = stockRepository.save(entity);
